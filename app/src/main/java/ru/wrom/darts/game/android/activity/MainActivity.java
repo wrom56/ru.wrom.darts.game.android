@@ -1,5 +1,6 @@
 package ru.wrom.darts.game.android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -40,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void onClickBullButton(View view) {
-
+		Intent intent = new Intent(this, GameActivity.class);
+		startActivity(intent);
 	}
 }
