@@ -1,3 +1,5 @@
 <resources>
 	<string name="app_name">Darts WroM</string>
+	<string name="title_activity_main">Darts WroM</string>
+	<string name="action_settings">settings</string>
 </resources>
