@@ -8,6 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import ru.wrom.darts.game.android.R;
+import ru.wrom.darts.game.android.Settings;
+import ru.wrom.darts.game.engine.api.Dart;
+import ru.wrom.darts.game.engine.api.GameType;
+import ru.wrom.darts.game.engine.api.Player;
+import ru.wrom.darts.game.engine.api.PlayerSettings;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -41,7 +46,42 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void onClickBullButton(View view) {
+		startGame(GameType.SECTOR_ATTEMPT, "BULL");
+	}
+
+	public void onClickAllDoubleButton(View view) {
+		startGame(GameType.ALL_DOUBLE, null);
+	}
+
+	public void onClick501Button(View view) {
+		startGame(GameType.GAME_X01, "501");
+	}
+
+
+	private void fillSettings(GameType gameType, String gameTypeParam) {
+		Settings.getInstance().getGameSettings().setGameType(gameType);
+		Settings.getInstance().getGameSettings().setGameTypeParam(gameTypeParam);
+		PlayerSettings playerSettings = new PlayerSettings();
+		Player player = new Player();
+		player.setName("WroM");
+		player.setCode("wrom");
+
+		playerSettings.setPlayer(player);
+		Dart dart = new Dart();
+		dart.setLabel("1");
+		dart.setCode("1");
+		playerSettings.setDart(dart);
+		Settings.getInstance().getGameSettings().getPlayersSettings().add(playerSettings);
+	}
+
+
+	private void startGame(GameType gameType, String gameTypeParam) {
 		Intent intent = new Intent(this, GameActivity.class);
+		fillSettings(gameType, gameTypeParam);
 		startActivity(intent);
+	}
+
+	public void onClickSector20Button(View view) {
+		startGame(GameType.SECTOR_ATTEMPT, "20");
 	}
 }
