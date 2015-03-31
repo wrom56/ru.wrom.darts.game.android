@@ -1,11 +1,13 @@
-package ru.wrom.darts.game.engine.controller;
+package ru.wrom.darts.game.core.engine.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.wrom.darts.game.engine.api.AddAttemptResult;
-import ru.wrom.darts.game.engine.api.Attempt;
-import ru.wrom.darts.game.engine.model.PlayerGame;
+import ru.wrom.darts.game.core.api.AddAttemptResult;
+import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.Game;
+import ru.wrom.darts.game.core.engine.model.PlayerGame;
+
 
 public class AllDoubleGameController extends AbstractGameController {
 
@@ -19,14 +21,19 @@ public class AllDoubleGameController extends AbstractGameController {
 	}
 
 	@Override
-	public List<String> getHints(PlayerGame playerGame) {
+	public List<String> buildHints(PlayerGame playerGame) {
 		List<String> hints = new ArrayList<>();
-		int totalScore = getTotalScore(playerGame);
+		int totalScore = calculateTotalScore(playerGame);
 		if (totalScore == 20) {
 			hints.add("BULL");
 		} else {
 			hints.add("D" + ++totalScore);
 		}
 		return hints;
+	}
+
+	@Override
+	protected boolean checkGameOver(Game game) {
+		return calculateTotalScore(getCurrentPlayerGame()) == 21;
 	}
 }

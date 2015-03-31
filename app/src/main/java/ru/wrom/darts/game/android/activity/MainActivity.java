@@ -9,10 +9,10 @@ import android.view.View;
 
 import ru.wrom.darts.game.android.R;
 import ru.wrom.darts.game.android.Settings;
-import ru.wrom.darts.game.engine.api.Dart;
-import ru.wrom.darts.game.engine.api.GameType;
-import ru.wrom.darts.game.engine.api.Player;
-import ru.wrom.darts.game.engine.api.PlayerSettings;
+import ru.wrom.darts.game.core.api.Dart;
+import ru.wrom.darts.game.core.api.GameType;
+import ru.wrom.darts.game.core.api.Player;
+import ru.wrom.darts.game.core.api.PlayerSettings;
 
 public class MainActivity extends ActionBarActivity {
 

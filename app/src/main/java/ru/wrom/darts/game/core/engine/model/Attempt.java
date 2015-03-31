@@ -1,16 +1,20 @@
-package ru.wrom.darts.game.engine.api;
+package ru.wrom.darts.game.core.engine.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import ru.wrom.darts.game.core.api.IAttempt;
 
-public class Attempt {
+public class Attempt implements IAttempt {
+
 	private Integer totalScore;
-	private List<String> dartScores;
 	private Integer dartCount;
 
 	public Attempt(Integer totalScore) {
+		this(totalScore, null);
+	}
+
+	public Attempt(Integer totalScore, Integer dartCount) {
 		this.totalScore = totalScore;
+		this.dartCount = dartCount;
 	}
 
 	public Integer getTotalScore() {
@@ -29,14 +33,4 @@ public class Attempt {
 		this.dartCount = dartCount;
 	}
 
-	public List<String> getDartScores() {
-		if (dartScores == null) {
-			dartScores = new ArrayList<>();
-		}
-		return dartScores;
-	}
-
-	public void setDartScores(List<String> dartScores) {
-		this.dartScores = dartScores;
-	}
 }

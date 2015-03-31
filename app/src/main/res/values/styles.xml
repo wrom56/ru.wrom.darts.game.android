@@ -5,4 +5,22 @@
 		<!-- Customize your theme here. -->
 	</style>
 
+	<style name="StatusBar">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:paddingLeft">10dp</item>
+	</style>
+
+	<style name="StatusBarParamName">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:textSize">15dp</item>
+	</style>
+
+	<style name="StatusBarParamValue" parent="StatusBarParamName">
+		<item name="android:paddingRight">20dp</item>
+		<item name="android:paddingLeft">5dp</item>
+	</style>
+
 </resources>

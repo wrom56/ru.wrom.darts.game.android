@@ -1,10 +1,10 @@
-package ru.wrom.darts.game.engine.model;
+package ru.wrom.darts.game.core.engine.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ru.wrom.darts.game.engine.api.GameType;
+import ru.wrom.darts.game.core.api.GameType;
 
 public class Game {
 

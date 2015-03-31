@@ -1,4 +1,4 @@
-package ru.wrom.darts.game.engine.api;
+package ru.wrom.darts.game.core.api;
 
 public class Dart {
 

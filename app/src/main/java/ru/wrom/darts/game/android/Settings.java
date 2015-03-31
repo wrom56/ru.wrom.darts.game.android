@@ -1,6 +1,6 @@
 package ru.wrom.darts.game.android;
 
-import ru.wrom.darts.game.engine.api.GameSettings;
+import ru.wrom.darts.game.core.api.GameSettings;
 
 public class Settings {
 

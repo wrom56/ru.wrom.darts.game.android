@@ -1,8 +1,8 @@
-package ru.wrom.darts.game.engine.controller;
+package ru.wrom.darts.game.core.engine.controller;
 
-import ru.wrom.darts.game.engine.api.AddAttemptResult;
-import ru.wrom.darts.game.engine.api.Attempt;
-import ru.wrom.darts.game.engine.model.PlayerGame;
+import ru.wrom.darts.game.core.api.AddAttemptResult;
+import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.PlayerGame;
 
 public class SectorGameController extends AbstractGameController {
 
@@ -19,10 +19,11 @@ public class SectorGameController extends AbstractGameController {
 			if (attempt.getTotalScore() % 25 != 0 || attempt.getTotalScore() > 150) {
 				return AddAttemptResult.INVALID_ATTEMPT;
 			}
-		}
-		Integer sectorInt = Integer.valueOf(sector);
-		if (attempt.getTotalScore() % sectorInt != 0 || attempt.getTotalScore() > 9 * sectorInt) {
-			return AddAttemptResult.INVALID_ATTEMPT;
+		} else {
+			Integer sectorInt = Integer.valueOf(sector);
+			if (attempt.getTotalScore() % sectorInt != 0 || attempt.getTotalScore() > 9 * sectorInt) {
+				return AddAttemptResult.INVALID_ATTEMPT;
+			}
 		}
 		return AddAttemptResult.ATTEMPT_ADDED;
 	}

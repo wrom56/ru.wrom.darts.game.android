@@ -1,7 +1,7 @@
-package ru.wrom.darts.game.engine.controller;
+package ru.wrom.darts.game.core.engine.controller;
 
-import ru.wrom.darts.game.engine.api.GameSettings;
-import ru.wrom.darts.game.engine.api.IGameController;
+import ru.wrom.darts.game.core.api.GameSettings;
+import ru.wrom.darts.game.core.api.IGameController;
 
 public class GameControllerFactory {
 

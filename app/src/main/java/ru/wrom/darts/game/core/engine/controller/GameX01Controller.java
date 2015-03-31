@@ -1,8 +1,10 @@
-package ru.wrom.darts.game.engine.controller;
+package ru.wrom.darts.game.core.engine.controller;
 
-import ru.wrom.darts.game.engine.api.AddAttemptResult;
-import ru.wrom.darts.game.engine.api.Attempt;
-import ru.wrom.darts.game.engine.model.PlayerGame;
+import ru.wrom.darts.game.core.api.AddAttemptResult;
+import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.Game;
+import ru.wrom.darts.game.core.engine.model.PlayerGame;
+
 
 public class GameX01Controller extends AbstractGameController {
 
@@ -14,7 +16,7 @@ public class GameX01Controller extends AbstractGameController {
 
 	@Override
 	protected AddAttemptResult checkAttempt(Attempt attempt, PlayerGame playerGame) {
-		int totalScore = getTotalScore(playerGame);
+		int totalScore = calculateTotalScore(playerGame);
 		if (totalScore == attempt.getTotalScore()) {
 			if (attempt.getDartCount() == null) {
 				return AddAttemptResult.NEED_DART_COUNT;
@@ -25,7 +27,7 @@ public class GameX01Controller extends AbstractGameController {
 			return AddAttemptResult.GAME_OVER;
 		}
 
-		if (totalScore < attempt.getTotalScore()) {
+		if (totalScore < attempt.getTotalScore() + 1) {
 			return AddAttemptResult.INVALID_ATTEMPT;
 		}
 
@@ -33,7 +35,12 @@ public class GameX01Controller extends AbstractGameController {
 	}
 
 	@Override
-	protected int getTotalScore(PlayerGame playerGame) {
-		return startScore - super.getTotalScore(playerGame);
+	protected int calculateTotalScore(PlayerGame playerGame) {
+		return startScore - super.calculateTotalScore(playerGame);
+	}
+
+	@Override
+	protected boolean checkGameOver(Game game) {
+		return calculateTotalScore(getCurrentPlayerGame()) == 0;
 	}
 }

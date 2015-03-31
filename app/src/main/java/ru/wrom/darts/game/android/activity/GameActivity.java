@@ -14,15 +14,15 @@ import java.util.List;
 
 import ru.wrom.darts.game.android.R;
 import ru.wrom.darts.game.android.Settings;
-import ru.wrom.darts.game.engine.api.AddAttemptResult;
-import ru.wrom.darts.game.engine.api.Attempt;
-import ru.wrom.darts.game.engine.api.GameSettings;
-import ru.wrom.darts.game.engine.api.IGameController;
-import ru.wrom.darts.game.engine.controller.GameControllerFactory;
+import ru.wrom.darts.game.core.api.AddAttemptResult;
+import ru.wrom.darts.game.core.api.GameSettings;
+import ru.wrom.darts.game.core.api.IAttempt;
+import ru.wrom.darts.game.core.api.IGameController;
+import ru.wrom.darts.game.core.engine.controller.GameControllerFactory;
 
 public class GameActivity extends ActionBarActivity {
 
-	private int attendScore;
+	private int attemptScore;
 	private IGameController gameController;
 
 	@Override
@@ -40,17 +40,18 @@ public class GameActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_cancel_last_attempt) {
+			cancelLastAttempt();
 			return true;
 		}
-
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void cancelLastAttempt() {
+		gameController.cancelLastAttempt();
+		attemptScore = 0;
+		updateView();
 	}
 
 	@Override
@@ -59,50 +60,53 @@ public class GameActivity extends ActionBarActivity {
 		setTitle(getTitle(Settings.getInstance().getGameSettings()));
 		gameController = GameControllerFactory.getController(Settings.getInstance().getGameSettings());
 		gameController.init(Settings.getInstance().getGameSettings());
+		createStatusBar(Settings.getInstance().getGameSettings());
 		updateView();
 	}
 
+	private void createStatusBar(GameSettings gameSettings) {
+		switch (gameSettings.getGameType()) {
+			default:
+				((TextView) findViewById(R.id.status_bar_param_name_1)).setText("darts:");
+				((TextView) findViewById(R.id.status_bar_param_name_2)).setText("3da:");
+				((TextView) findViewById(R.id.status_bar_param_name_3)).setText("hi:");
+				((TextView) findViewById(R.id.status_bar_param_name_4)).setText("co:");
+		}
+	}
+
 	private void onClickNumber(int number) {
-		int newCurrentAttendScore = attendScore * 10 + number;
+		int newCurrentAttendScore = attemptScore * 10 + number;
 		if (newCurrentAttendScore <= 180) {
-			attendScore = newCurrentAttendScore;
-			updateCurrentAttendScore();
+			attemptScore = newCurrentAttendScore;
+			updateCurrentAttemptScore();
 		}
 	}
 
 	private void updateView() {
 		updateMainTable();
-		updateCurrentAttendScore();
+		updateCurrentAttemptScore();
+		updateStatusBar();
 	}
 
+	private void updateStatusBar() {
+		((TextView) findViewById(R.id.status_bar_param_value_1)).setText(String.valueOf(gameController.getCurrentPlayerStatus().getDartCount()));
+		((TextView) findViewById(R.id.status_bar_param_value_2)).setText(String.valueOf(gameController.getCurrentPlayerStatus().getLegAverageAttemptScore()));
+	}
 
 	private void updateMainTable() {
-		TextView textView = (TextView) findViewById(R.id.attend_count);
-		textView.setText(String.valueOf(gameController.getGameStatus().getPlayerStatuses().get(0).getAttempts().size()));
-		textView = (TextView) findViewById(R.id.score);
-		textView.setText(String.valueOf(gameController.getGameStatus().getPlayerStatuses().get(0).getTotalScore()));
-		textView = (TextView) findViewById(R.id.previous_attempt);
-		List<Attempt> attempts = gameController.getGameStatus().getPlayerStatuses().get(0).getAttempts();
-		if (attempts.isEmpty()) {
-			textView.setText("");
-		} else {
-			textView.setText(String.valueOf(attempts.get(attempts.size() - 1).getTotalScore()));
-		}
+		((TextView) findViewById(R.id.score)).setText(String.valueOf(gameController.getCurrentPlayerStatus().getTotalScore()));
 
-		textView = (TextView) findViewById(R.id.hints);
-		List<String> hints = gameController.getHints();
-		if (hints.isEmpty()) {
-			textView.setText("");
-		} else {
-			textView.setText(hints.get(0));
-		}
+		List<? extends IAttempt> attempts = gameController.getCurrentPlayerStatus().getAttempts();
+		((TextView) findViewById(R.id.previous_attempt)).setText(attempts.isEmpty() ? "" : String.valueOf(attempts.get(attempts.size() - 1).getTotalScore()));
+
+		List<String> hints = gameController.getCurrentPlayerStatus().getHints();
+		((TextView) findViewById(R.id.hints)).setText(hints.isEmpty() ? "" : hints.get(0));
 	}
 
-	private void updateCurrentAttendScore() {
-		TextView currentAttendScoreTextView = (TextView) findViewById(R.id.attend_score);
-		currentAttendScoreTextView.setText(String.valueOf(attendScore));
+	private void updateCurrentAttemptScore() {
+		TextView view = (TextView) findViewById(R.id.attempt_score);
+		view.setText(String.valueOf(attemptScore));
 	}
-
 
 	public void onClickNumber1(View view) {
 		onClickNumber(1);
@@ -117,28 +121,35 @@ public class GameActivity extends ActionBarActivity {
 	}
 
 	public void onClickEnter(View view) {
-		Attempt attempt = new Attempt(attendScore);
-		AddAttemptResult result = gameController.addAttempt(attempt);
+		AlertDialog.Builder dlgAlert;
+		AddAttemptResult result = gameController.addAttempt(attemptScore);
 		switch (result) {
 			case ATTEMPT_ADDED:
-				Toast toast = Toast.makeText(getApplicationContext(), String.valueOf(attendScore), Toast.LENGTH_SHORT);
+				String scoreText = attemptScore == 0 ? "No score" : String.valueOf(attemptScore);
+				Toast toast = Toast.makeText(getApplicationContext(), scoreText, Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 				break;
 			case INVALID_ATTEMPT:
-				AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
-				dlgAlert.setMessage(String.valueOf(attendScore) + " is invalid score");
+				dlgAlert = new AlertDialog.Builder(this);
+				dlgAlert.setMessage(String.valueOf(attemptScore) + " is invalid score");
+				dlgAlert.setNegativeButton("OK", null);
+				dlgAlert.create().show();
+				break;
+			case GAME_OVER:
+				dlgAlert = new AlertDialog.Builder(this);
+				dlgAlert.setMessage("Game over");
 				dlgAlert.setNegativeButton("OK", null);
 				dlgAlert.create().show();
 		}
-		attendScore = 0;
+		attemptScore = 0;
 		updateView();
 	}
 
 
 	public void onClickDelete(View view) {
-		attendScore = 0;
-		updateCurrentAttendScore();
+		attemptScore = 0;
+		updateCurrentAttemptScore();
 	}
 
 	public void onClickNumber6(View view) {
