@@ -84,4 +84,8 @@ public class MainActivity extends ActionBarActivity {
 	public void onClickSector20Button(View view) {
 		startGame(GameType.SECTOR_ATTEMPT, "20");
 	}
+
+	public void onClickBigRoundButton(View view) {
+		startGame(GameType.BIG_ROUND, null);
+	}
 }

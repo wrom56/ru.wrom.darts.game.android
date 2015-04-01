@@ -12,7 +12,7 @@
 		android:layout_alignParentStart="false"
 		android:layout_alignParentTop="true"
 		android:orientation="vertical"
-		android:background="#b6f3e13d">
+		>
 
 		<TableLayout
 			style="@style/AppTheme"
@@ -20,7 +20,7 @@
 			android:layout_height="0dp"
 			android:layout_centerHorizontal="true"
 			android:layout_weight="1"
-			android:background="#ff4aa948">
+			android:background="#ffcec8ff">
 
 			<TableRow
 				android:layout_width="fill_parent"
@@ -50,6 +50,39 @@
 					android:textStyle="bold"
 					android:gravity="center"/>
 
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="20dp"
+					android:layout_height="fill_parent"
+
+					android:gravity="center">
+
+					<TextView
+						android:id="@+id/last_attempt1"
+						android:layout_height="wrap_content"
+						android:layout_width="fill_parent"
+						android:textSize="10dp"
+						android:gravity="right"
+						/>
+
+					<TextView
+						android:id="@+id/last_attempt2"
+						android:layout_height="wrap_content"
+						android:layout_width="fill_parent"
+						android:textSize="10dp"
+						android:gravity="right"
+						/>
+
+					<TextView
+						android:id="@+id/last_attempt3"
+						android:layout_height="wrap_content"
+						android:layout_width="fill_parent"
+						android:textSize="10dp"
+						android:gravity="right"
+						/>
+
+				</LinearLayout>
+
 			</TableRow>
 
 		</TableLayout>
@@ -59,9 +92,10 @@
 
 			android:layout_width="fill_parent"
 			android:layout_height="0dp"
-			android:layout_weight="1">
+			android:layout_weight="1"
+			android:background="#ffcec8ff">
 
-			<TextView
+		<TextView
 				android:id="@+id/attempt_score"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
@@ -82,9 +116,11 @@
 
 		</LinearLayout>
 
-		<LinearLayout style="@style/StatusBar">
+		<LinearLayout
+			style="@style/StatusBar"
+			android:background="#ff008cff">
 
-			<TextView
+		<TextView
 				style="@style/StatusBarParamName"
 				android:id="@+id/status_bar_param_name_1"/>
 

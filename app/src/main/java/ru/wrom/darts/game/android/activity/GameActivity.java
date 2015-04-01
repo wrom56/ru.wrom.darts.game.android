@@ -35,7 +35,6 @@ public class GameActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_game, menu);
 		return true;
 	}
@@ -69,9 +68,9 @@ public class GameActivity extends ActionBarActivity {
 	private void createStatusBar(GameSettings gameSettings) {
 		switch (gameSettings.getGameType()) {
 			default:
-				((TextView) findViewById(R.id.status_bar_param_name_1)).setText("Leg: darts:");
+				((TextView) findViewById(R.id.status_bar_param_name_1)).setText("darts:");
 				((TextView) findViewById(R.id.status_bar_param_name_2)).setText("3da:");
-				((TextView) findViewById(R.id.status_bar_param_name_3)).setText("lst:");
+				((TextView) findViewById(R.id.status_bar_param_name_3)).setText("hi:");
 				((TextView) findViewById(R.id.status_bar_param_name_4)).setText("co:");
 		}
 	}
@@ -93,14 +92,16 @@ public class GameActivity extends ActionBarActivity {
 	private void updateStatusBar() {
 		((TextView) findViewById(R.id.status_bar_param_value_1)).setText(String.valueOf(gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getDartCount()));
 		((TextView) findViewById(R.id.status_bar_param_value_2)).setText(String.format("%.1f", gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAverageAttemptScore()));
-		List<? extends IAttempt> attempts = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAttempts();
-		((TextView) findViewById(R.id.status_bar_param_value_3)).setText(attempts.isEmpty() ? "" : String.valueOf(attempts.get(attempts.size() - 1).getTotalScore()));
-
-
 	}
 
 	private void updateMainTable() {
 		((TextView) findViewById(R.id.score)).setText(String.valueOf(gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getTotalScore()));
+
+		List<? extends IAttempt> attempts = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAttempts();
+		((TextView) findViewById(R.id.last_attempt1)).setText(attempts.isEmpty() ? "" : String.valueOf(attempts.get(attempts.size() - 1).getTotalScore()));
+		((TextView) findViewById(R.id.last_attempt2)).setText(attempts.size() < 2 ? "" : String.valueOf(attempts.get(attempts.size() - 2).getTotalScore()));
+		((TextView) findViewById(R.id.last_attempt3)).setText(attempts.size() < 3 ? "" : String.valueOf(attempts.get(attempts.size() - 3).getTotalScore()));
+
 
 		List<String> hints = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getHints();
 		((TextView) findViewById(R.id.hints)).setText(hints.isEmpty() ? "" : hints.get(0));
