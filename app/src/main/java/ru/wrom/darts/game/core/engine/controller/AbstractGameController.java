@@ -1,6 +1,5 @@
 package ru.wrom.darts.game.core.engine.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -10,9 +9,10 @@ import ru.wrom.darts.game.core.api.AddAttemptResult;
 import ru.wrom.darts.game.core.api.GameSettings;
 import ru.wrom.darts.game.core.api.IAttempt;
 import ru.wrom.darts.game.core.api.IGameController;
-import ru.wrom.darts.game.core.api.IPlayerStatus;
+import ru.wrom.darts.game.core.api.IPlayerLegStatus;
 import ru.wrom.darts.game.core.api.Player;
 import ru.wrom.darts.game.core.api.PlayerSettings;
+import ru.wrom.darts.game.core.engine.Util;
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.Game;
 import ru.wrom.darts.game.core.engine.model.PlayerGame;
@@ -21,9 +21,15 @@ public abstract class AbstractGameController implements IGameController {
 
 	protected Game game;
 
+
 	@Override
-	public List<IPlayerStatus> getPlayerStatuses() {
-		List<IPlayerStatus> playerStatuses = new ArrayList<>();
+	public Player getCurrentPlayer() {
+		return getCurrentPlayerGame().getPlayer();
+	}
+
+	@Override
+	public List<IPlayerLegStatus> getPlayerStatuses() {
+		List<IPlayerLegStatus> playerStatuses = new ArrayList<>();
 		for (PlayerGame playerGame : game.getPlayerGames()) {
 			playerStatuses.add(buildPlayerStatus(playerGame));
 		}
@@ -64,7 +70,7 @@ public abstract class AbstractGameController implements IGameController {
 
 
 	@Override
-	public IPlayerStatus getCurrentPlayerStatus() {
+	public IPlayerLegStatus getPlayerLegStatus(Player player) {
 		return buildPlayerStatus(getCurrentPlayerGame());
 	}
 
@@ -88,12 +94,8 @@ public abstract class AbstractGameController implements IGameController {
 		return getCurrentPlayerGame().getAttempts().size() == 10;
 	}
 
-	private IPlayerStatus buildPlayerStatus(final PlayerGame playerGame) {
-		return new IPlayerStatus() {
-			@Override
-			public Player getPlayer() {
-				return playerGame.getPlayer();
-			}
+	private IPlayerLegStatus buildPlayerStatus(final PlayerGame playerGame) {
+		return new IPlayerLegStatus() {
 
 			@Override
 			public List<? extends IAttempt> getAttempts() {
@@ -102,7 +104,7 @@ public abstract class AbstractGameController implements IGameController {
 
 			@Override
 			public int getTotalScore() {
-				return calculateTotalScore(playerGame);
+				return calculateLegScore(playerGame);
 			}
 
 			@Override
@@ -111,18 +113,11 @@ public abstract class AbstractGameController implements IGameController {
 			}
 
 			@Override
-			public BigDecimal getLegAverageAttemptScore() {
-				return new BigDecimal(0);
-			}
-
-			@Override
-			public int getLegMaxAttemptScore() {
-				return 0;
-			}
-
-			@Override
-			public int getMaxCheckout() {
-				return 0;
+			public float getAverageAttemptScore() {
+				if (getDartCount() == 0) {
+					return 0;
+				}
+				return Util.calculateAttemptsTotalScore(playerGame.getAttempts()) * 3f / getDartCount();
 			}
 
 			@Override
@@ -133,13 +128,8 @@ public abstract class AbstractGameController implements IGameController {
 
 	}
 
-
-	protected int calculateTotalScore(PlayerGame playerGame) {
-		int totalScore = 0;
-		for (Attempt attempt : playerGame.getAttempts()) {
-			totalScore += attempt.getTotalScore();
-		}
-		return totalScore;
+	protected int calculateLegScore(PlayerGame playerGame) {
+		return Util.calculateAttemptsTotalScore(playerGame.getAttempts());
 	}
 
 	protected int calculateDartCount(PlayerGame playerGame) {

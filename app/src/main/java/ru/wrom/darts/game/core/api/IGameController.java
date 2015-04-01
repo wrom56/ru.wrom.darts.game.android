@@ -10,9 +10,11 @@ public interface IGameController {
 
 	AddAttemptResult addAttempt(int totalScore, int dartCount);
 
-	List<IPlayerStatus> getPlayerStatuses();
+	List<IPlayerLegStatus> getPlayerStatuses();
 
-	IPlayerStatus getCurrentPlayerStatus();
+	IPlayerLegStatus getPlayerLegStatus(Player player);
+
+	Player getCurrentPlayer();
 
 	void cancelLastAttempt();
 

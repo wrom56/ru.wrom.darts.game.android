@@ -23,7 +23,7 @@ public class AllDoubleGameController extends AbstractGameController {
 	@Override
 	public List<String> buildHints(PlayerGame playerGame) {
 		List<String> hints = new ArrayList<>();
-		int totalScore = calculateTotalScore(playerGame);
+		int totalScore = calculateLegScore(playerGame);
 		if (totalScore == 20) {
 			hints.add("BULL");
 		} else {
@@ -34,6 +34,6 @@ public class AllDoubleGameController extends AbstractGameController {
 
 	@Override
 	protected boolean checkGameOver(Game game) {
-		return calculateTotalScore(getCurrentPlayerGame()) == 21;
+		return calculateLegScore(getCurrentPlayerGame()) == 21;
 	}
 }

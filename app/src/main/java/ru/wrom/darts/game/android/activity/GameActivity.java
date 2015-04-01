@@ -89,17 +89,17 @@ public class GameActivity extends ActionBarActivity {
 	}
 
 	private void updateStatusBar() {
-		((TextView) findViewById(R.id.status_bar_param_value_1)).setText(String.valueOf(gameController.getCurrentPlayerStatus().getDartCount()));
-		((TextView) findViewById(R.id.status_bar_param_value_2)).setText(String.valueOf(gameController.getCurrentPlayerStatus().getLegAverageAttemptScore()));
+		((TextView) findViewById(R.id.status_bar_param_value_1)).setText(String.valueOf(gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getDartCount()));
+		((TextView) findViewById(R.id.status_bar_param_value_2)).setText(String.format("%.1f", gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAverageAttemptScore()));
 	}
 
 	private void updateMainTable() {
-		((TextView) findViewById(R.id.score)).setText(String.valueOf(gameController.getCurrentPlayerStatus().getTotalScore()));
+		((TextView) findViewById(R.id.score)).setText(String.valueOf(gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getTotalScore()));
 
-		List<? extends IAttempt> attempts = gameController.getCurrentPlayerStatus().getAttempts();
+		List<? extends IAttempt> attempts = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAttempts();
 		((TextView) findViewById(R.id.previous_attempt)).setText(attempts.isEmpty() ? "" : String.valueOf(attempts.get(attempts.size() - 1).getTotalScore()));
 
-		List<String> hints = gameController.getCurrentPlayerStatus().getHints();
+		List<String> hints = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getHints();
 		((TextView) findViewById(R.id.hints)).setText(hints.isEmpty() ? "" : hints.get(0));
 	}
 

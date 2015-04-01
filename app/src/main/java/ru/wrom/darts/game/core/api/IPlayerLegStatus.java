@@ -1,11 +1,8 @@
 package ru.wrom.darts.game.core.api;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-public interface IPlayerStatus {
-
-	Player getPlayer();
+public interface IPlayerLegStatus {
 
 	List<? extends IAttempt> getAttempts();
 
@@ -13,11 +10,7 @@ public interface IPlayerStatus {
 
 	int getDartCount();
 
-	BigDecimal getLegAverageAttemptScore();
-
-	int getLegMaxAttemptScore();
-
-	int getMaxCheckout();
+	float getAverageAttemptScore();
 
 	List<String> getHints();
 

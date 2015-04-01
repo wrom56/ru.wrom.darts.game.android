@@ -1,6 +1,7 @@
 package ru.wrom.darts.game.core.engine.controller;
 
 import ru.wrom.darts.game.core.api.AddAttemptResult;
+import ru.wrom.darts.game.core.engine.Util;
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.Game;
 import ru.wrom.darts.game.core.engine.model.PlayerGame;
@@ -16,7 +17,7 @@ public class GameX01Controller extends AbstractGameController {
 
 	@Override
 	protected AddAttemptResult checkAttempt(Attempt attempt, PlayerGame playerGame) {
-		int totalScore = calculateTotalScore(playerGame);
+		int totalScore = calculateLegScore(playerGame);
 		if (totalScore == attempt.getTotalScore()) {
 			if (attempt.getDartCount() == null) {
 				return AddAttemptResult.NEED_DART_COUNT;
@@ -35,12 +36,12 @@ public class GameX01Controller extends AbstractGameController {
 	}
 
 	@Override
-	protected int calculateTotalScore(PlayerGame playerGame) {
-		return startScore - super.calculateTotalScore(playerGame);
+	protected int calculateLegScore(PlayerGame playerGame) {
+		return startScore - Util.calculateAttemptsTotalScore(playerGame.getAttempts());
 	}
 
 	@Override
 	protected boolean checkGameOver(Game game) {
-		return calculateTotalScore(getCurrentPlayerGame()) == 0;
+		return calculateLegScore(getCurrentPlayerGame()) == 0;
 	}
 }
