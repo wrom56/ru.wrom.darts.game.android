@@ -52,26 +52,6 @@
 
 			</TableRow>
 
-			<TableRow
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:layout_column="3"
-				>
-
-				<TextView android:layout_weight="4"/>
-
-				<TextView android:layout_weight="2"/>
-
-				<TextView
-					android:layout_height="wrap_content"
-					android:id="@+id/previous_attempt"
-					android:layout_weight="3"
-					android:textSize="20dp"
-					android:text="0"
-					android:gravity="center"/>
-
-			</TableRow>
-
 		</TableLayout>
 
 		<LinearLayout

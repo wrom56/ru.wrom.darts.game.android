@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,9 +69,9 @@ public class GameActivity extends ActionBarActivity {
 	private void createStatusBar(GameSettings gameSettings) {
 		switch (gameSettings.getGameType()) {
 			default:
-				((TextView) findViewById(R.id.status_bar_param_name_1)).setText("darts:");
+				((TextView) findViewById(R.id.status_bar_param_name_1)).setText("Leg: darts:");
 				((TextView) findViewById(R.id.status_bar_param_name_2)).setText("3da:");
-				((TextView) findViewById(R.id.status_bar_param_name_3)).setText("hi:");
+				((TextView) findViewById(R.id.status_bar_param_name_3)).setText("lst:");
 				((TextView) findViewById(R.id.status_bar_param_name_4)).setText("co:");
 		}
 	}
@@ -91,13 +93,14 @@ public class GameActivity extends ActionBarActivity {
 	private void updateStatusBar() {
 		((TextView) findViewById(R.id.status_bar_param_value_1)).setText(String.valueOf(gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getDartCount()));
 		((TextView) findViewById(R.id.status_bar_param_value_2)).setText(String.format("%.1f", gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAverageAttemptScore()));
+		List<? extends IAttempt> attempts = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAttempts();
+		((TextView) findViewById(R.id.status_bar_param_value_3)).setText(attempts.isEmpty() ? "" : String.valueOf(attempts.get(attempts.size() - 1).getTotalScore()));
+
+
 	}
 
 	private void updateMainTable() {
 		((TextView) findViewById(R.id.score)).setText(String.valueOf(gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getTotalScore()));
-
-		List<? extends IAttempt> attempts = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getAttempts();
-		((TextView) findViewById(R.id.previous_attempt)).setText(attempts.isEmpty() ? "" : String.valueOf(attempts.get(attempts.size() - 1).getTotalScore()));
 
 		List<String> hints = gameController.getPlayerLegStatus(gameController.getCurrentPlayer()).getHints();
 		((TextView) findViewById(R.id.hints)).setText(hints.isEmpty() ? "" : hints.get(0));
@@ -125,10 +128,7 @@ public class GameActivity extends ActionBarActivity {
 		AddAttemptResult result = gameController.addAttempt(attemptScore);
 		switch (result) {
 			case ATTEMPT_ADDED:
-				String scoreText = attemptScore == 0 ? "No score" : String.valueOf(attemptScore);
-				Toast toast = Toast.makeText(getApplicationContext(), scoreText, Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
+				showScoreToast(attemptScore == 0 ? "No score" : String.valueOf(attemptScore));
 				break;
 			case INVALID_ATTEMPT:
 				dlgAlert = new AlertDialog.Builder(this);
@@ -193,6 +193,17 @@ public class GameActivity extends ActionBarActivity {
 		}
 
 		return "";
+	}
+
+	private void showScoreToast(String text) {
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.toast_layout_root));
+		((TextView) layout.findViewById(R.id.toast_text)).setText(text);
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setView(layout);
+		toast.show();
 	}
 
 }
