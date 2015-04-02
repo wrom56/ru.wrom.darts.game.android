@@ -19,6 +19,16 @@ import ru.wrom.darts.game.core.engine.model.PlayerGame;
 
 public abstract class AbstractGameController implements IGameController {
 
+
+	@Override
+	public boolean isCanSubmitScore(int totalScore) {
+		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AddAttemptResult.INVALID_ATTEMPT);
+	}
+
+	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
+		return false;
+	}
+
 	protected Game game;
 
 

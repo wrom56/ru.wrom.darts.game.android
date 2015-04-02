@@ -33,6 +33,11 @@ public class AllDoubleGameController extends AbstractGameController {
 	}
 
 	@Override
+	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
+		return true;
+	}
+
+	@Override
 	protected boolean checkGameOver(Game game) {
 		return calculateLegScore(getCurrentPlayerGame()) == 21;
 	}

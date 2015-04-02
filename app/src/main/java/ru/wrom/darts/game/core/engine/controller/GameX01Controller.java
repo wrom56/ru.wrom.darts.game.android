@@ -35,6 +35,7 @@ public class GameX01Controller extends AbstractGameController {
 		return AddAttemptResult.ATTEMPT_ADDED;
 	}
 
+
 	@Override
 	protected int calculateLegScore(PlayerGame playerGame) {
 		return startScore - Util.calculateAttemptsTotalScore(playerGame.getAttempts());
@@ -43,5 +44,10 @@ public class GameX01Controller extends AbstractGameController {
 	@Override
 	protected boolean checkGameOver(Game game) {
 		return calculateLegScore(getCurrentPlayerGame()) == 0;
+	}
+
+	@Override
+	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
+		return totalScore * 10 >= calculateLegScore(playerGame);
 	}
 }

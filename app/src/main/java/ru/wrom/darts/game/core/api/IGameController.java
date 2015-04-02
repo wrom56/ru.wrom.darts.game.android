@@ -18,4 +18,6 @@ public interface IGameController {
 
 	void cancelLastAttempt();
 
+	boolean isCanSubmitScore(int totalScore);
+
 }

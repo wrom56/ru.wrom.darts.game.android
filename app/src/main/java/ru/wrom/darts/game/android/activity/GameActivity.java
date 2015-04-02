@@ -80,6 +80,9 @@ public class GameActivity extends ActionBarActivity {
 		if (newCurrentAttendScore <= 180) {
 			attemptScore = newCurrentAttendScore;
 			updateCurrentAttemptScore();
+			if (gameController.isCanSubmitScore(attemptScore)) {
+				submitScore();
+			}
 		}
 	}
 
@@ -124,7 +127,7 @@ public class GameActivity extends ActionBarActivity {
 		onClickNumber(0);
 	}
 
-	public void onClickEnter(View view) {
+	private void submitScore() {
 		AlertDialog.Builder dlgAlert;
 		AddAttemptResult result = gameController.addAttempt(attemptScore);
 		switch (result) {
@@ -145,6 +148,10 @@ public class GameActivity extends ActionBarActivity {
 		}
 		attemptScore = 0;
 		updateView();
+	}
+
+	public void onClickEnter(View view) {
+		submitScore();
 	}
 
 
@@ -201,7 +208,7 @@ public class GameActivity extends ActionBarActivity {
 		View layout = inflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.toast_layout_root));
 		((TextView) layout.findViewById(R.id.toast_text)).setText(text);
 		Toast toast = new Toast(getApplicationContext());
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 400);
 		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.setView(layout);
 		toast.show();
