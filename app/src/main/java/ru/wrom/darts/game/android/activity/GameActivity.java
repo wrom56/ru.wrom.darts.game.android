@@ -156,7 +156,7 @@ public class GameActivity extends ActionBarActivity {
 
 
 	public void onClickDelete(View view) {
-		attemptScore = 0;
+		attemptScore = attemptScore / 10;
 		updateCurrentAttemptScore();
 	}
 

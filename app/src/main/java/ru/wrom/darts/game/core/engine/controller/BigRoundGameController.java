@@ -41,4 +41,9 @@ public class BigRoundGameController extends AbstractGameController {
 	protected boolean checkGameOver(Game game) {
 		return getCurrentPlayerGame().getAttempts().size() == 21;
 	}
+
+	@Override
+	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
+		return true;
+	}
 }
