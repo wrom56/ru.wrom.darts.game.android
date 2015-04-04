@@ -28,7 +28,7 @@ public class GameX01Controller extends AbstractGameController {
 			return AddAttemptResult.GAME_OVER;
 		}
 
-		if (totalScore < attempt.getTotalScore() + 1) {
+		if (totalScore - 1 <= attempt.getTotalScore()) {
 			return AddAttemptResult.INVALID_ATTEMPT;
 		}
 
