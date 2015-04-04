@@ -3,8 +3,8 @@ package ru.wrom.darts.game.core.engine.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.wrom.darts.game.core.api.AddAttemptResult;
 import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Game;
 import ru.wrom.darts.game.core.engine.model.PlayerGame;
 
@@ -12,11 +12,11 @@ import ru.wrom.darts.game.core.engine.model.PlayerGame;
 public class AllDoubleGameController extends AbstractGameController {
 
 	@Override
-	public AddAttemptResult checkAttempt(Attempt attempt, PlayerGame playerGame) {
+	public AttemptStatus checkAttempt(Attempt attempt, PlayerGame playerGame) {
 		if (attempt.getTotalScore() > 3) {
-			return AddAttemptResult.INVALID_ATTEMPT;
+			return AttemptStatus.INVALID;
 		} else {
-			return AddAttemptResult.ATTEMPT_ADDED;
+			return AttemptStatus.VALID;
 		}
 	}
 

@@ -1,6 +1,7 @@
 package ru.wrom.darts.game.android.activity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
@@ -12,14 +13,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.wrom.darts.game.android.R;
 import ru.wrom.darts.game.android.Settings;
-import ru.wrom.darts.game.core.api.AddAttemptResult;
 import ru.wrom.darts.game.core.api.GameSettings;
 import ru.wrom.darts.game.core.api.IAttempt;
 import ru.wrom.darts.game.core.api.IGameController;
+import ru.wrom.darts.game.core.api.LegStatus;
 import ru.wrom.darts.game.core.engine.controller.GameControllerFactory;
 
 public class GameActivity extends ActionBarActivity {
@@ -81,7 +83,7 @@ public class GameActivity extends ActionBarActivity {
 			attemptScore = newCurrentAttendScore;
 			updateCurrentAttemptScore();
 			if (gameController.isCanSubmitScore(attemptScore)) {
-				submitScore();
+				submitScore(attemptScore, null);
 			}
 		}
 	}
@@ -127,11 +129,12 @@ public class GameActivity extends ActionBarActivity {
 		onClickNumber(0);
 	}
 
-	private void submitScore() {
+	private void submitScore(int attemptScore, Integer dartCount) {
 		AlertDialog.Builder dlgAlert;
-		AddAttemptResult result = gameController.addAttempt(attemptScore);
+		LegStatus result = gameController.addAttempt(attemptScore, dartCount);
 		switch (result) {
 			case ATTEMPT_ADDED:
+				addAttempt();
 				showScoreToast(attemptScore == 0 ? "No score" : String.valueOf(attemptScore));
 				break;
 			case INVALID_ATTEMPT:
@@ -140,18 +143,28 @@ public class GameActivity extends ActionBarActivity {
 				dlgAlert.setNegativeButton("OK", null);
 				dlgAlert.create().show();
 				break;
-			case GAME_OVER:
+			case NEED_DART_COUNT_1:
+				showDartCountDialog(1);
+				break;
+			case NEED_DART_COUNT_2:
+				showDartCountDialog(2);
+				break;
+			case LEG_OVER:
+				addAttempt();
 				dlgAlert = new AlertDialog.Builder(this);
 				dlgAlert.setMessage("Game over");
 				dlgAlert.setNegativeButton("OK", null);
 				dlgAlert.create().show();
 		}
+	}
+
+	private void addAttempt() {
 		attemptScore = 0;
 		updateView();
 	}
 
 	public void onClickEnter(View view) {
-		submitScore();
+		submitScore(attemptScore, null);
 	}
 
 
@@ -203,6 +216,10 @@ public class GameActivity extends ActionBarActivity {
 		return "";
 	}
 
+	private void onSubmitDartCount(Integer dartCount) {
+		submitScore(attemptScore, dartCount);
+	}
+
 	private void showScoreToast(String text) {
 		LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.toast_layout_root));
@@ -213,5 +230,23 @@ public class GameActivity extends ActionBarActivity {
 		toast.setView(layout);
 		toast.show();
 	}
+
+	private void showDartCountDialog(final int minDartCount) {
+		List<String> variants = new ArrayList<>();
+		if (minDartCount == 1) {
+			variants.add("1");
+		}
+		variants.add("2");
+		variants.add("3");
+
+
+		new AlertDialog.Builder(this).setTitle("Dart count?")
+				.setItems(variants.toArray(new String[variants.size()]), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						onSubmitDartCount(minDartCount == 1 ? which + 1 : which + 2);
+					}
+				}).create().show();
+	}
+
 
 }

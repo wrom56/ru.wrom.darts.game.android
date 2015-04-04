@@ -2,8 +2,9 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	style="@style/AppTheme"
 	tools:context="ru.wrom.darts.game.android.activity.GameActivity"
-	android:background="#000000">
+	>
 
 	<LinearLayout
 		android:id="@+id/linearLayout"
@@ -15,7 +16,7 @@
 		>
 
 		<TableLayout
-			style="@style/AppTheme"
+
 			android:layout_width="fill_parent"
 			android:layout_height="0dp"
 			android:layout_centerHorizontal="true"
@@ -95,7 +96,7 @@
 			android:layout_weight="1"
 			android:background="#ffcec8ff">
 
-		<TextView
+			<TextView
 				android:id="@+id/attempt_score"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
@@ -120,7 +121,7 @@
 			style="@style/StatusBar"
 			android:background="#ff008cff">
 
-		<TextView
+			<TextView
 				style="@style/StatusBarParamName"
 				android:id="@+id/status_bar_param_name_1"/>
 

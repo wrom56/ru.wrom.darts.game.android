@@ -5,15 +5,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import ru.wrom.darts.game.core.api.AddAttemptResult;
 import ru.wrom.darts.game.core.api.GameSettings;
 import ru.wrom.darts.game.core.api.IAttempt;
 import ru.wrom.darts.game.core.api.IGameController;
 import ru.wrom.darts.game.core.api.IPlayerLegStatus;
+import ru.wrom.darts.game.core.api.LegStatus;
 import ru.wrom.darts.game.core.api.Player;
 import ru.wrom.darts.game.core.api.PlayerSettings;
 import ru.wrom.darts.game.core.engine.Util;
 import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Game;
 import ru.wrom.darts.game.core.engine.model.PlayerGame;
 
@@ -22,7 +23,7 @@ public abstract class AbstractGameController implements IGameController {
 
 	@Override
 	public boolean isCanSubmitScore(int totalScore) {
-		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AddAttemptResult.INVALID_ATTEMPT);
+		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
 	}
 
 	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
@@ -69,12 +70,7 @@ public abstract class AbstractGameController implements IGameController {
 	}
 
 	@Override
-	public AddAttemptResult addAttempt(int totalScore) {
-		return addAttempt(new Attempt(totalScore));
-	}
-
-	@Override
-	public AddAttemptResult addAttempt(int totalScore, int dartCount) {
+	public LegStatus addAttempt(int totalScore, Integer dartCount) {
 		return addAttempt(new Attempt(totalScore, dartCount));
 	}
 
@@ -85,24 +81,44 @@ public abstract class AbstractGameController implements IGameController {
 	}
 
 
-	protected AddAttemptResult addAttempt(Attempt attempt) {
+	protected LegStatus addAttempt(Attempt attempt) {
+		if (!checkAttempt(attempt)) {
+			return LegStatus.INVALID_ATTEMPT;
+		}
 		PlayerGame currentPlayerGame = getCurrentPlayerGame();
-		AddAttemptResult result = checkAttempt(attempt, currentPlayerGame);
-		if (result != AddAttemptResult.ATTEMPT_ADDED) {
-			return result;
+		AttemptStatus attemptStatus = checkAttempt(attempt, currentPlayerGame);
+
+		if (attemptStatus == AttemptStatus.CHECKOUT) {
+			int minCheckoutDartCount = getMinCheckoutDartCount(attempt);
+			if (attempt.getDartCount() != null) {
+				if (attempt.getDartCount() < minCheckoutDartCount) {
+					return LegStatus.INVALID_ATTEMPT;
+				} else {
+					return addAttempt(attempt, currentPlayerGame);
+				}
+			} else {
+				if (minCheckoutDartCount == 3) {
+					attempt.setDartCount(3);
+					return addAttempt(attempt, currentPlayerGame);
+				} else {
+					return minCheckoutDartCount == 1 ? LegStatus.NEED_DART_COUNT_1 : LegStatus.NEED_DART_COUNT_2;
+				}
+			}
 		}
-		processAttempt(attempt);
-		addAttempt(attempt, currentPlayerGame);
-		if (checkGameOver(game)) {
-			return AddAttemptResult.GAME_OVER;
-		} else {
-			return AddAttemptResult.ATTEMPT_ADDED;
+
+		if (attemptStatus == AttemptStatus.VALID) {
+			attempt.setDartCount(3);
+			return addAttempt(attempt, currentPlayerGame);
 		}
+
+		return LegStatus.INVALID_ATTEMPT;
 	}
 
-	protected boolean checkGameOver(Game game) {
-		return getCurrentPlayerGame().getAttempts().size() == 10;
+
+	protected int getMinCheckoutDartCount(Attempt totalScore) {
+		return 3;
 	}
+
 
 	private IPlayerLegStatus buildPlayerStatus(final PlayerGame playerGame) {
 		return new IPlayerLegStatus() {
@@ -143,14 +159,29 @@ public abstract class AbstractGameController implements IGameController {
 	}
 
 	protected int calculateDartCount(PlayerGame playerGame) {
-		return playerGame.getAttempts().size() * 3;
+		int result = 0;
+		for (Attempt attempt : playerGame.getAttempts()) {
+			result += attempt.getDartCount();
+		}
+		return result;
 	}
 
-	protected void addAttempt(Attempt attempt, PlayerGame playerGame) {
+	private LegStatus addAttempt(Attempt attempt, PlayerGame playerGame) {
 		playerGame.getAttempts().add(attempt);
+		return checkGameOver(game) ? LegStatus.LEG_OVER : LegStatus.ATTEMPT_ADDED;
 	}
 
-	protected abstract AddAttemptResult checkAttempt(Attempt attempt, PlayerGame playerGame);
+	protected boolean checkAttempt(Attempt attempt) {
+		if (attempt.getTotalScore() != null && attempt.getTotalScore() > 180) {
+			return false;
+		}
+		if (attempt.getDartCount() != null && (attempt.getDartCount() > 3 || attempt.getDartCount() < 1)) {
+			return false;
+		}
+		return true;
+	}
+
+	protected abstract AttemptStatus checkAttempt(Attempt attempt, PlayerGame playerGame);
 
 	protected List<String> buildHints(PlayerGame playerGame) {
 		return Collections.emptyList();
@@ -172,4 +203,7 @@ public abstract class AbstractGameController implements IGameController {
 	}
 
 
+	protected boolean checkGameOver(Game game) {
+		return getCurrentPlayerGame().getAttempts().size() == 10;
+	}
 }

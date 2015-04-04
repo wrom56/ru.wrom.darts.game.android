@@ -3,26 +3,26 @@ package ru.wrom.darts.game.core.engine.controller;
 import java.util.Arrays;
 import java.util.List;
 
-import ru.wrom.darts.game.core.api.AddAttemptResult;
 import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Game;
 import ru.wrom.darts.game.core.engine.model.PlayerGame;
 
 public class BigRoundGameController extends AbstractGameController {
 
 	@Override
-	protected AddAttemptResult checkAttempt(Attempt attempt, PlayerGame playerGame) {
+	protected AttemptStatus checkAttempt(Attempt attempt, PlayerGame playerGame) {
 		int attemptNumber = playerGame.getAttempts().size() + 1;
 		if (attemptNumber < 21) {
 			if (attempt.getTotalScore() % attemptNumber != 0 || attempt.getTotalScore() > attemptNumber * 9) {
-				return AddAttemptResult.INVALID_ATTEMPT;
+				return AttemptStatus.INVALID;
 			}
 		} else {
 			if (attempt.getTotalScore() % 25 != 0 || attempt.getTotalScore() > 150) {
-				return AddAttemptResult.INVALID_ATTEMPT;
+				return AttemptStatus.INVALID;
 			}
 		}
-		return AddAttemptResult.ATTEMPT_ADDED;
+		return AttemptStatus.VALID;
 	}
 
 	@Override

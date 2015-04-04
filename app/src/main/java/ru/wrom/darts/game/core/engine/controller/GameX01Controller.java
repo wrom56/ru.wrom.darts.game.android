@@ -1,13 +1,19 @@
 package ru.wrom.darts.game.core.engine.controller;
 
-import ru.wrom.darts.game.core.api.AddAttemptResult;
+import java.util.Arrays;
+import java.util.List;
+
 import ru.wrom.darts.game.core.engine.Util;
 import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Game;
 import ru.wrom.darts.game.core.engine.model.PlayerGame;
 
 
 public class GameX01Controller extends AbstractGameController {
+
+	private List<Integer> invalidCheckouts = Arrays.asList(169, 168, 166, 165, 163, 162);
+	private List<Integer> twoDartsCheckouts = Arrays.asList(100, 101, 104, 107, 110);
 
 	private int startScore;
 
@@ -16,25 +22,37 @@ public class GameX01Controller extends AbstractGameController {
 	}
 
 	@Override
-	protected AddAttemptResult checkAttempt(Attempt attempt, PlayerGame playerGame) {
-		int totalScore = calculateLegScore(playerGame);
-		if (totalScore == attempt.getTotalScore()) {
-			if (attempt.getDartCount() == null) {
-				return AddAttemptResult.NEED_DART_COUNT;
-			}
-			if (attempt.getDartCount() == 0) {
-				return AddAttemptResult.INVALID_DART_COUNT;
-			}
-			return AddAttemptResult.GAME_OVER;
+	protected AttemptStatus checkAttempt(Attempt attempt, PlayerGame playerGame) {
+		int legScore = calculateLegScore(playerGame);
+
+		if (invalidCheckouts.contains(legScore)) {
+			return AttemptStatus.INVALID;
 		}
 
-		if (totalScore - 1 <= attempt.getTotalScore()) {
-			return AddAttemptResult.INVALID_ATTEMPT;
+		if (legScore == attempt.getTotalScore()) {
+			return AttemptStatus.CHECKOUT;
 		}
 
-		return AddAttemptResult.ATTEMPT_ADDED;
+		if (legScore - 1 <= attempt.getTotalScore()) {
+			return AttemptStatus.INVALID;
+		}
+
+		return AttemptStatus.VALID;
 	}
 
+	@Override
+	public int getMinCheckoutDartCount(Attempt attempt) {
+		int score = attempt.getTotalScore();
+		if (score == 50 || (score <= 40 && score % 2 == 0)) {
+			return 1;
+		}
+
+		if (score <= 98 || (twoDartsCheckouts.contains(score))) {
+			return 2;
+		}
+
+		return 3;
+	}
 
 	@Override
 	protected int calculateLegScore(PlayerGame playerGame) {
@@ -48,6 +66,6 @@ public class GameX01Controller extends AbstractGameController {
 
 	@Override
 	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
-		return totalScore * 10 >= calculateLegScore(playerGame);
+		return totalScore * 10 > calculateLegScore(playerGame);
 	}
 }

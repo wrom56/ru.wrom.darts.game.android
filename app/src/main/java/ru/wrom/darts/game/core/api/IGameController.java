@@ -6,9 +6,7 @@ public interface IGameController {
 
 	void init(GameSettings gameSettings);
 
-	AddAttemptResult addAttempt(int totalScore);
-
-	AddAttemptResult addAttempt(int totalScore, int dartCount);
+	LegStatus addAttempt(int totalScore, Integer dartCount);
 
 	List<IPlayerLegStatus> getPlayerStatuses();
 
