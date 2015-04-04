@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void onClick501Button(View view) {
-		startGame(GameType.GAME_X01, "24");
+		startGame(GameType.GAME_X01, "501");
 	}
 
 
