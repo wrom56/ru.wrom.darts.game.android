@@ -208,7 +208,7 @@ public class GameActivity extends ActionBarActivity {
 		View layout = inflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.toast_layout_root));
 		((TextView) layout.findViewById(R.id.toast_text)).setText(text);
 		Toast toast = new Toast(getApplicationContext());
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 400);
+		toast.setGravity(Gravity.TOP, 0, 300);
 		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.setView(layout);
 		toast.show();
