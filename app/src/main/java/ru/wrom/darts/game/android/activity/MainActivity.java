@@ -10,7 +10,7 @@ import android.view.View;
 import ru.wrom.darts.game.android.R;
 import ru.wrom.darts.game.android.Settings;
 import ru.wrom.darts.game.core.api.Dart;
-import ru.wrom.darts.game.core.api.GameType;
+import ru.wrom.darts.game.core.api.GameTypeCode;
 import ru.wrom.darts.game.core.api.Player;
 import ru.wrom.darts.game.core.api.PlayerSettings;
 
@@ -46,20 +46,20 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void onClickBullButton(View view) {
-		startGame(GameType.SECTOR_ATTEMPT, "BULL");
+		startGame(GameTypeCode.SECTOR_ATTEMPT, "BULL");
 	}
 
 	public void onClickAllDoubleButton(View view) {
-		startGame(GameType.ALL_DOUBLE, null);
+		startGame(GameTypeCode.ALL_DOUBLE, null);
 	}
 
 	public void onClick501Button(View view) {
-		startGame(GameType.GAME_X01, "501");
+		startGame(GameTypeCode.GAME_X01, "501");
 	}
 
 
-	private void fillSettings(GameType gameType, String gameTypeParam) {
-		Settings.getInstance().getGameSettings().setGameType(gameType);
+	private void fillSettings(GameTypeCode gameTypeCode, String gameTypeParam) {
+		Settings.getInstance().getGameSettings().setGameTypeCode(gameTypeCode);
 		Settings.getInstance().getGameSettings().setGameTypeParam(gameTypeParam);
 		PlayerSettings playerSettings = new PlayerSettings();
 		Player player = new Player();
@@ -75,17 +75,17 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 
-	private void startGame(GameType gameType, String gameTypeParam) {
+	private void startGame(GameTypeCode gameTypeCode, String gameTypeParam) {
 		Intent intent = new Intent(this, GameActivity.class);
-		fillSettings(gameType, gameTypeParam);
+		fillSettings(gameTypeCode, gameTypeParam);
 		startActivity(intent);
 	}
 
 	public void onClickSector20Button(View view) {
-		startGame(GameType.SECTOR_ATTEMPT, "20");
+		startGame(GameTypeCode.SECTOR_ATTEMPT, "20");
 	}
 
 	public void onClickBigRoundButton(View view) {
-		startGame(GameType.BIG_ROUND, null);
+		startGame(GameTypeCode.BIG_ROUND, null);
 	}
 }

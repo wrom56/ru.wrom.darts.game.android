@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ru.wrom.darts.game.core.api.GameType;
+import ru.wrom.darts.game.core.api.GameTypeCode;
 
 public class Game {
 
-	private GameType gameType;
+	private GameTypeCode gameTypeCode;
 
 	private Date startDate;
 
@@ -28,12 +28,12 @@ public class Game {
 		getPlayerLegs().add(playerLeg);
 	}
 
-	public GameType getGameType() {
-		return gameType;
+	public GameTypeCode getGameTypeCode() {
+		return gameTypeCode;
 	}
 
-	public void setGameType(GameType gameType) {
-		this.gameType = gameType;
+	public void setGameTypeCode(GameTypeCode gameTypeCode) {
+		this.gameTypeCode = gameTypeCode;
 	}
 
 	public Date getStartDate() {

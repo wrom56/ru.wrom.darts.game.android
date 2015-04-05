@@ -6,7 +6,7 @@ import ru.wrom.darts.game.core.api.IGameController;
 public class GameControllerFactory {
 
 	public static IGameController getController(GameSettings gameSettings) {
-		switch (gameSettings.getGameType()) {
+		switch (gameSettings.getGameTypeCode()) {
 			case SECTOR_ATTEMPT:
 				return new SectorGameController(gameSettings.getGameTypeParam());
 			case ALL_DOUBLE:
@@ -16,7 +16,7 @@ public class GameControllerFactory {
 			case BIG_ROUND:
 				return new BigRoundGameController();
 		}
-		throw new IllegalArgumentException("Game type: " + gameSettings.getGameType().name());
+		throw new IllegalArgumentException("Game type: " + gameSettings.getGameTypeCode().name());
 	}
 
 }

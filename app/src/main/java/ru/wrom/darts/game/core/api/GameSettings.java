@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameSettings {
-	private GameType gameType;
+	private GameTypeCode gameTypeCode;
 	private String gameTypeParam;
 	private List<PlayerSettings> playersSettings = new ArrayList<>();
 
-	public void setGameType(GameType gameType) {
-		this.gameType = gameType;
+	public void setGameTypeCode(GameTypeCode gameTypeCode) {
+		this.gameTypeCode = gameTypeCode;
 	}
 
 	public void addPlayer(PlayerSettings playerSettings) {
 		getPlayersSettings().add(playerSettings);
 	}
 
-	public GameType getGameType() {
-		return gameType;
+	public GameTypeCode getGameTypeCode() {
+		return gameTypeCode;
 	}
 
 	public List<PlayerSettings> getPlayersSettings() {

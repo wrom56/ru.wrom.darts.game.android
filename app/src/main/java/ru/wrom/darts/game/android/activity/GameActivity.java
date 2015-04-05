@@ -68,7 +68,7 @@ public class GameActivity extends ActionBarActivity {
 	}
 
 	private void createStatusBar(GameSettings gameSettings) {
-		switch (gameSettings.getGameType()) {
+		switch (gameSettings.getGameTypeCode()) {
 			default:
 				((TextView) findViewById(R.id.status_bar_param_name_1)).setText("darts:");
 				((TextView) findViewById(R.id.status_bar_param_name_2)).setText("3da:");
@@ -202,7 +202,7 @@ public class GameActivity extends ActionBarActivity {
 	}
 
 	private String getTitle(GameSettings gameSettings) {
-		switch (gameSettings.getGameType()) {
+		switch (gameSettings.getGameTypeCode()) {
 			case SECTOR_ATTEMPT:
 				return "Sector " + gameSettings.getGameTypeParam();
 			case ALL_DOUBLE:
