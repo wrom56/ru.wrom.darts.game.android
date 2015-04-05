@@ -7,7 +7,7 @@ import ru.wrom.darts.game.core.engine.Util;
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Game;
-import ru.wrom.darts.game.core.engine.model.PlayerGame;
+import ru.wrom.darts.game.core.engine.model.PlayerLeg;
 
 
 public class GameX01Controller extends AbstractGameController {
@@ -22,8 +22,8 @@ public class GameX01Controller extends AbstractGameController {
 	}
 
 	@Override
-	protected AttemptStatus checkAttempt(Attempt attempt, PlayerGame playerGame) {
-		int legScore = calculateLegScore(playerGame);
+	protected AttemptStatus checkAttempt(Attempt attempt, PlayerLeg playerLeg) {
+		int legScore = calculateLegScore(playerLeg);
 
 		if (invalidCheckouts.contains(legScore)) {
 			return AttemptStatus.INVALID;
@@ -55,8 +55,8 @@ public class GameX01Controller extends AbstractGameController {
 	}
 
 	@Override
-	protected int calculateLegScore(PlayerGame playerGame) {
-		return startScore - Util.calculateAttemptsTotalScore(playerGame.getAttempts());
+	protected int calculateLegScore(PlayerLeg playerLeg) {
+		return startScore - Util.calculateAttemptsTotalScore(playerLeg.getAttempts());
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class GameX01Controller extends AbstractGameController {
 	}
 
 	@Override
-	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
-		return totalScore * 10 > calculateLegScore(playerGame);
+	protected boolean isCanSubmitScore(int totalScore, PlayerLeg playerLeg) {
+		return totalScore * 10 > calculateLegScore(playerLeg);
 	}
 }

@@ -6,13 +6,13 @@ import java.util.List;
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Game;
-import ru.wrom.darts.game.core.engine.model.PlayerGame;
+import ru.wrom.darts.game.core.engine.model.PlayerLeg;
 
 
 public class AllDoubleGameController extends AbstractGameController {
 
 	@Override
-	public AttemptStatus checkAttempt(Attempt attempt, PlayerGame playerGame) {
+	public AttemptStatus checkAttempt(Attempt attempt, PlayerLeg playerLeg) {
 		if (attempt.getTotalScore() > 3) {
 			return AttemptStatus.INVALID;
 		} else {
@@ -21,9 +21,9 @@ public class AllDoubleGameController extends AbstractGameController {
 	}
 
 	@Override
-	public List<String> buildHints(PlayerGame playerGame) {
+	public List<String> buildHints(PlayerLeg playerLeg) {
 		List<String> hints = new ArrayList<>();
-		int totalScore = calculateLegScore(playerGame);
+		int totalScore = calculateLegScore(playerLeg);
 		if (totalScore == 20) {
 			hints.add("BULL");
 		} else {
@@ -33,7 +33,7 @@ public class AllDoubleGameController extends AbstractGameController {
 	}
 
 	@Override
-	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
+	protected boolean isCanSubmitScore(int totalScore, PlayerLeg playerLeg) {
 		return true;
 	}
 

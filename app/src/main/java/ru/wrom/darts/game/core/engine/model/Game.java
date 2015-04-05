@@ -14,18 +14,18 @@ public class Game {
 
 	private Date endDate;
 
-	private List<PlayerGame> playerGames;
+	private List<PlayerLeg> playerLegs;
 
-	public List<PlayerGame> getPlayerGames() {
-		if (playerGames == null) {
-			playerGames = new ArrayList<>();
+	public List<PlayerLeg> getPlayerLegs() {
+		if (playerLegs == null) {
+			playerLegs = new ArrayList<>();
 		}
-		return playerGames;
+		return playerLegs;
 	}
 
-	public void addPlayerGame(PlayerGame playerGame) {
-		playerGame.setGame(this);
-		getPlayerGames().add(playerGame);
+	public void addPlayerGame(PlayerLeg playerLeg) {
+		playerLeg.setGame(this);
+		getPlayerLegs().add(playerLeg);
 	}
 
 	public GameType getGameType() {
@@ -52,8 +52,8 @@ public class Game {
 		this.endDate = endDate;
 	}
 
-	public void setPlayerGames(List<PlayerGame> playerGames) {
-		this.playerGames = playerGames;
+	public void setPlayerLegs(List<PlayerLeg> playerLegs) {
+		this.playerLegs = playerLegs;
 	}
 
 

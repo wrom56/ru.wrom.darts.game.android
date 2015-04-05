@@ -16,7 +16,7 @@ import ru.wrom.darts.game.core.engine.Util;
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Game;
-import ru.wrom.darts.game.core.engine.model.PlayerGame;
+import ru.wrom.darts.game.core.engine.model.PlayerLeg;
 
 public abstract class AbstractGameController implements IGameController {
 
@@ -26,7 +26,7 @@ public abstract class AbstractGameController implements IGameController {
 		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
 	}
 
-	protected boolean isCanSubmitScore(int totalScore, PlayerGame playerGame) {
+	protected boolean isCanSubmitScore(int totalScore, PlayerLeg playerLeg) {
 		return false;
 	}
 
@@ -41,8 +41,8 @@ public abstract class AbstractGameController implements IGameController {
 	@Override
 	public List<IPlayerLegStatus> getPlayerStatuses() {
 		List<IPlayerLegStatus> playerStatuses = new ArrayList<>();
-		for (PlayerGame playerGame : game.getPlayerGames()) {
-			playerStatuses.add(buildPlayerStatus(playerGame));
+		for (PlayerLeg playerLeg : game.getPlayerLegs()) {
+			playerStatuses.add(buildPlayerStatus(playerLeg));
 		}
 		return playerStatuses;
 	}
@@ -62,10 +62,10 @@ public abstract class AbstractGameController implements IGameController {
 		game.setStartDate(new Date());
 		game.setGameType(gameSettings.getGameType());
 		for (PlayerSettings playerSettings : gameSettings.getPlayersSettings()) {
-			PlayerGame playerGame = new PlayerGame();
-			playerGame.setPlayer(playerSettings.getPlayer());
-			playerGame.setDart(playerSettings.getDart());
-			game.addPlayerGame(playerGame);
+			PlayerLeg playerLeg = new PlayerLeg();
+			playerLeg.setPlayer(playerSettings.getPlayer());
+			playerLeg.setDart(playerSettings.getDart());
+			game.addPlayerGame(playerLeg);
 		}
 	}
 
@@ -85,8 +85,8 @@ public abstract class AbstractGameController implements IGameController {
 		if (!checkAttempt(attempt)) {
 			return LegStatus.INVALID_ATTEMPT;
 		}
-		PlayerGame currentPlayerGame = getCurrentPlayerGame();
-		AttemptStatus attemptStatus = checkAttempt(attempt, currentPlayerGame);
+		PlayerLeg currentPlayerLeg = getCurrentPlayerGame();
+		AttemptStatus attemptStatus = checkAttempt(attempt, currentPlayerLeg);
 
 		if (attemptStatus == AttemptStatus.CHECKOUT) {
 			int minCheckoutDartCount = getMinCheckoutDartCount(attempt);
@@ -94,12 +94,12 @@ public abstract class AbstractGameController implements IGameController {
 				if (attempt.getDartCount() < minCheckoutDartCount) {
 					return LegStatus.INVALID_ATTEMPT;
 				} else {
-					return addAttempt(attempt, currentPlayerGame);
+					return addAttempt(attempt, currentPlayerLeg);
 				}
 			} else {
 				if (minCheckoutDartCount == 3) {
 					attempt.setDartCount(3);
-					return addAttempt(attempt, currentPlayerGame);
+					return addAttempt(attempt, currentPlayerLeg);
 				} else {
 					return minCheckoutDartCount == 1 ? LegStatus.NEED_DART_COUNT_1 : LegStatus.NEED_DART_COUNT_2;
 				}
@@ -108,7 +108,7 @@ public abstract class AbstractGameController implements IGameController {
 
 		if (attemptStatus == AttemptStatus.VALID) {
 			attempt.setDartCount(3);
-			return addAttempt(attempt, currentPlayerGame);
+			return addAttempt(attempt, currentPlayerLeg);
 		}
 
 		return LegStatus.INVALID_ATTEMPT;
@@ -120,22 +120,22 @@ public abstract class AbstractGameController implements IGameController {
 	}
 
 
-	private IPlayerLegStatus buildPlayerStatus(final PlayerGame playerGame) {
+	private IPlayerLegStatus buildPlayerStatus(final PlayerLeg playerLeg) {
 		return new IPlayerLegStatus() {
 
 			@Override
 			public List<? extends IAttempt> getAttempts() {
-				return playerGame.getAttempts();
+				return playerLeg.getAttempts();
 			}
 
 			@Override
 			public int getTotalScore() {
-				return calculateLegScore(playerGame);
+				return calculateLegScore(playerLeg);
 			}
 
 			@Override
 			public int getDartCount() {
-				return calculateDartCount(playerGame);
+				return calculateDartCount(playerLeg);
 			}
 
 			@Override
@@ -143,31 +143,31 @@ public abstract class AbstractGameController implements IGameController {
 				if (getDartCount() == 0) {
 					return 0;
 				}
-				return Util.calculateAttemptsTotalScore(playerGame.getAttempts()) * 3f / getDartCount();
+				return Util.calculateAttemptsTotalScore(playerLeg.getAttempts()) * 3f / getDartCount();
 			}
 
 			@Override
 			public List<String> getHints() {
-				return buildHints(playerGame);
+				return buildHints(playerLeg);
 			}
 		};
 
 	}
 
-	protected int calculateLegScore(PlayerGame playerGame) {
-		return Util.calculateAttemptsTotalScore(playerGame.getAttempts());
+	protected int calculateLegScore(PlayerLeg playerLeg) {
+		return Util.calculateAttemptsTotalScore(playerLeg.getAttempts());
 	}
 
-	protected int calculateDartCount(PlayerGame playerGame) {
+	protected int calculateDartCount(PlayerLeg playerLeg) {
 		int result = 0;
-		for (Attempt attempt : playerGame.getAttempts()) {
+		for (Attempt attempt : playerLeg.getAttempts()) {
 			result += attempt.getDartCount();
 		}
 		return result;
 	}
 
-	private LegStatus addAttempt(Attempt attempt, PlayerGame playerGame) {
-		playerGame.getAttempts().add(attempt);
+	private LegStatus addAttempt(Attempt attempt, PlayerLeg playerLeg) {
+		playerLeg.getAttempts().add(attempt);
 		return checkGameOver(game) ? LegStatus.LEG_OVER : LegStatus.ATTEMPT_ADDED;
 	}
 
@@ -181,9 +181,9 @@ public abstract class AbstractGameController implements IGameController {
 		return true;
 	}
 
-	protected abstract AttemptStatus checkAttempt(Attempt attempt, PlayerGame playerGame);
+	protected abstract AttemptStatus checkAttempt(Attempt attempt, PlayerLeg playerLeg);
 
-	protected List<String> buildHints(PlayerGame playerGame) {
+	protected List<String> buildHints(PlayerLeg playerLeg) {
 		return Collections.emptyList();
 	}
 
@@ -194,12 +194,12 @@ public abstract class AbstractGameController implements IGameController {
 	}
 
 
-	protected PlayerGame getCurrentPlayerGame() {
-		return game.getPlayerGames().get(0);
+	protected PlayerLeg getCurrentPlayerGame() {
+		return game.getPlayerLegs().get(0);
 	}
 
-	protected PlayerGame getPreviousPlayerGame() {
-		return game.getPlayerGames().get(0);
+	protected PlayerLeg getPreviousPlayerGame() {
+		return game.getPlayerLegs().get(0);
 	}
 
 

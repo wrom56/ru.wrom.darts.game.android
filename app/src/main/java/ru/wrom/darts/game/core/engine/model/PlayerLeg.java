@@ -6,7 +6,7 @@ import java.util.List;
 import ru.wrom.darts.game.core.api.Dart;
 import ru.wrom.darts.game.core.api.Player;
 
-public class PlayerGame {
+public class PlayerLeg {
 
 	private Game game;
 
