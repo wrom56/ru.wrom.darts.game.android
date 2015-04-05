@@ -59,8 +59,7 @@ public class MainActivity extends ActionBarActivity {
 
 
 	private void fillSettings(GameTypeCode gameTypeCode, String gameTypeParam) {
-		Settings.getInstance().getGameSettings().setGameTypeCode(gameTypeCode);
-		Settings.getInstance().getGameSettings().setGameTypeParam(gameTypeParam);
+		Settings.getInstance().getGameSettings().setGameType(gameTypeCode, gameTypeParam);
 		PlayerSettings playerSettings = new PlayerSettings();
 		Player player = new Player();
 		player.setName("WroM");

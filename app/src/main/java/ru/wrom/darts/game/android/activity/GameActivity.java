@@ -68,13 +68,10 @@ public class GameActivity extends ActionBarActivity {
 	}
 
 	private void createStatusBar(GameSettings gameSettings) {
-		switch (gameSettings.getGameTypeCode()) {
-			default:
-				((TextView) findViewById(R.id.status_bar_param_name_1)).setText("darts:");
-				((TextView) findViewById(R.id.status_bar_param_name_2)).setText("3da:");
-				((TextView) findViewById(R.id.status_bar_param_name_3)).setText("hi:");
-				((TextView) findViewById(R.id.status_bar_param_name_4)).setText("co:");
-		}
+		((TextView) findViewById(R.id.status_bar_param_name_1)).setText("darts:");
+		((TextView) findViewById(R.id.status_bar_param_name_2)).setText("3da:");
+		((TextView) findViewById(R.id.status_bar_param_name_3)).setText("hi:");
+		((TextView) findViewById(R.id.status_bar_param_name_4)).setText("co:");
 	}
 
 	private void onClickNumber(int number) {
@@ -202,13 +199,13 @@ public class GameActivity extends ActionBarActivity {
 	}
 
 	private String getTitle(GameSettings gameSettings) {
-		switch (gameSettings.getGameTypeCode()) {
+		switch (gameSettings.getGameType().getCode()) {
 			case SECTOR_ATTEMPT:
-				return "Sector " + gameSettings.getGameTypeParam();
+				return "Sector " + gameSettings.getGameType().getParam();
 			case ALL_DOUBLE:
 				return "All double";
 			case GAME_X01:
-				return gameSettings.getGameTypeParam();
+				return gameSettings.getGameType().getParam();
 			case BIG_ROUND:
 				return "Big round";
 		}

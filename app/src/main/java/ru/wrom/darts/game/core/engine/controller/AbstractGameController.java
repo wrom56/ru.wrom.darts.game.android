@@ -60,7 +60,6 @@ public abstract class AbstractGameController implements IGameController {
 	public void init(GameSettings gameSettings) {
 		game = new Game();
 		game.setStartDate(new Date());
-		game.setGameTypeCode(gameSettings.getGameTypeCode());
 		for (PlayerSettings playerSettings : gameSettings.getPlayersSettings()) {
 			PlayerLeg playerLeg = new PlayerLeg();
 			playerLeg.setPlayer(playerSettings.getPlayer());
