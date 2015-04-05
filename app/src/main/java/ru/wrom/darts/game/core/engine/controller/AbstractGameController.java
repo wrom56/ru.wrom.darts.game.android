@@ -159,11 +159,7 @@ public abstract class AbstractGameController implements IGameController {
 	}
 
 	protected int calculateDartCount(PlayerLeg playerLeg) {
-		int result = 0;
-		for (Attempt attempt : playerLeg.getAttempts()) {
-			result += attempt.getDartCount();
-		}
-		return result;
+		return Util.calculateAttemptsDartCount(playerLeg.getAttempts());
 	}
 
 	private LegStatus addAttempt(Attempt attempt, PlayerLeg playerLeg) {

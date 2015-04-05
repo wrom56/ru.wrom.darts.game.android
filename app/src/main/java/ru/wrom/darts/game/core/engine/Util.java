@@ -13,4 +13,12 @@ public class Util {
 		}
 		return totalScore;
 	}
+
+	public static int calculateAttemptsDartCount(List<Attempt> attempts) {
+		int result = 0;
+		for (Attempt attempt : attempts) {
+			result += attempt.getDartCount();
+		}
+		return result;
+	}
 }
