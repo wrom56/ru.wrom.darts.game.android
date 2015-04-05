@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
 
 
 	private void fillSettings(GameTypeCode gameTypeCode, String gameTypeParam) {
-		Settings.getInstance().getGameSettings().setGameType(gameTypeCode, gameTypeParam);
+		Settings.getInstance().getMatchSettings().setGameType(gameTypeCode, gameTypeParam);
 		PlayerSettings playerSettings = new PlayerSettings();
 		Player player = new Player();
 		player.setName("WroM");
@@ -70,12 +70,12 @@ public class MainActivity extends ActionBarActivity {
 		dart.setLabel("1");
 		dart.setCode("1");
 		playerSettings.setDart(dart);
-		Settings.getInstance().getGameSettings().getPlayersSettings().add(playerSettings);
+		Settings.getInstance().getMatchSettings().getPlayersSettings().add(playerSettings);
 	}
 
 
 	private void startGame(GameTypeCode gameTypeCode, String gameTypeParam) {
-		Intent intent = new Intent(this, GameActivity.class);
+		Intent intent = new Intent(this, MatchActivity.class);
 		fillSettings(gameTypeCode, gameTypeParam);
 		startActivity(intent);
 	}

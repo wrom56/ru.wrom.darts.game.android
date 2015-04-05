@@ -1,12 +1,18 @@
 package ru.wrom.darts.game.core.engine.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ru.wrom.darts.game.core.api.GameType;
+import ru.wrom.darts.game.core.api.PlayerSettings;
+
 public class Match {
-	/*
+
 	private GameType gameType;
 	private int maxSetCount;
 	private int maxLegCount;
-	private List<PlayerData> playerDataList;
-	private List<Set> sets;
+	private List<PlayerSettings> playerSettingsList;
+	private List<Set> sets = new ArrayList<>();
 
 	public GameType getGameType() {
 		return gameType;
@@ -24,25 +30,6 @@ public class Match {
 		this.maxSetCount = maxSetCount;
 	}
 
-	public List<PlayerData> getPlayerDataList() {
-		return playerDataList;
-	}
-
-	public void setPlayerDataList(List<PlayerData> playerDataList) {
-		this.playerDataList = playerDataList;
-	}
-
-	public List<Set> getSets() {
-		if (sets == null) {
-			sets = new ArrayList<>();
-		}
-		return sets;
-	}
-
-	public void setSets(List<Set> sets) {
-		this.sets = sets;
-	}
-
 	public int getMaxLegCount() {
 		return maxLegCount;
 	}
@@ -50,5 +37,24 @@ public class Match {
 	public void setMaxLegCount(int maxLegCount) {
 		this.maxLegCount = maxLegCount;
 	}
-	*/
+
+	public List<PlayerSettings> getPlayerSettingsList() {
+		return playerSettingsList;
+	}
+
+	public void setPlayerSettingsList(List<PlayerSettings> playerSettingsList) {
+		this.playerSettingsList = playerSettingsList;
+	}
+
+	public List<Set> getSets() {
+		return sets;
+	}
+
+	public void setSets(List<Set> sets) {
+		this.sets = sets;
+	}
+
+	public void newSet() {
+		sets.add(new Set(this));
+	}
 }

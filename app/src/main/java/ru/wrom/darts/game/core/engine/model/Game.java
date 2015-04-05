@@ -20,7 +20,7 @@ public class Game {
 	}
 
 	public void addPlayerGame(PlayerLeg playerLeg) {
-		playerLeg.setGame(this);
+		//playerLeg.setGame(this);
 		getPlayerLegs().add(playerLeg);
 	}
 

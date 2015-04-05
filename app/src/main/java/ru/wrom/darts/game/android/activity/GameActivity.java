@@ -51,12 +51,6 @@ public class GameActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void cancelLastAttempt() {
-		gameController.cancelLastAttempt();
-		attemptScore = 0;
-		updateView();
-	}
-
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -243,6 +237,12 @@ public class GameActivity extends ActionBarActivity {
 						onSubmitDartCount(minDartCount == 1 ? which + 1 : which + 2);
 					}
 				}).create().show();
+	}
+
+	private void cancelLastAttempt() {
+		gameController.cancelLastAttempt();
+		attemptScore = 0;
+		updateView();
 	}
 
 

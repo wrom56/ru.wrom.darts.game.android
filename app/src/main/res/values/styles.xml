@@ -5,6 +5,44 @@
 		<!-- Customize your theme here. -->
 	</style>
 
+	<style name="ScoreTable">
+		<item name="android:textSize">45dp</item>
+		<item name="android:gravity">center</item>
+	</style>
+
+	<style name="ScoreTable.Player" parent="ScoreTable">
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:layout_weight">4</item>
+	</style>
+
+	<style name="ScoreTable.SetWin" parent="ScoreTable">
+		<item name="android:layout_weight">1</item>
+	</style>
+
+	<style name="ScoreTable.LegWin" parent="ScoreTable">
+		<item name="android:layout_weight">1</item>
+	</style>
+
+	<style name="ScoreTable.LegScore" parent="ScoreTable">
+		<item name="android:textStyle">bold</item>
+		<item name="android:layout_weight">3</item>
+	</style>
+
+	<style name="ScoreTable.LastAttempt">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:textSize">10dp</item>
+		<item name="android:gravity">right</item>
+	</style>
+
+	<style name="ScoreButton">
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:background">#ff7cc0ff</item>
+		<item name="android:textSize">35dp</item>
+	</style>
+
 	<style name="StatusBar">
 		<item name="android:orientation">horizontal</item>
 		<item name="android:layout_width">fill_parent</item>

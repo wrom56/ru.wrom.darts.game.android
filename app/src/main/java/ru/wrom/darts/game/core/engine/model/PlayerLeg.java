@@ -3,53 +3,36 @@ package ru.wrom.darts.game.core.engine.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.wrom.darts.game.core.api.Dart;
-import ru.wrom.darts.game.core.api.Player;
+import ru.wrom.darts.game.core.api.PlayerSettings;
 
 public class PlayerLeg {
 
-	private Game game;
+	private final Leg leg;
+	private final PlayerSettings playerSettings;
 
-	private Player player;
+	private List<Attempt> attempts = new ArrayList<>();
 
-	private Dart dart;
-
-	private List<Attempt> attempts;
-
-
-	public Game getGame() {
-		return game;
+	public PlayerLeg(Leg leg, PlayerSettings playerSettings) {
+		this.leg = leg;
+		this.playerSettings = playerSettings;
 	}
 
-	public void setGame(Game game) {
-		this.game = game;
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	public Dart getDart() {
-		return dart;
-	}
-
-	public void setDart(Dart dart) {
-		this.dart = dart;
+	public PlayerSettings getPlayerSettings() {
+		return playerSettings;
 	}
 
 	public List<Attempt> getAttempts() {
-		if (attempts == null) {
-			attempts = new ArrayList<>();
-		}
 		return attempts;
 	}
 
-	public void setAttempts(List<Attempt> attempts) {
-		this.attempts = attempts;
+	public void addAttempt(Attempt attempt) {
+		this.attempts.add(attempt);
+	}
+
+	public void removeLastAttempt() {
+		if (!attempts.isEmpty()) {
+			attempts.remove(attempts.size() - 1);
+		}
 	}
 }
 

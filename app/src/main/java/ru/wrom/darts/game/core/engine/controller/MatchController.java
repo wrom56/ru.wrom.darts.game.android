@@ -1,26 +1,35 @@
 package ru.wrom.darts.game.core.engine.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import ru.wrom.darts.game.core.api.GameSettings;
-import ru.wrom.darts.game.core.api.IAttempt;
-import ru.wrom.darts.game.core.api.IGameController;
-import ru.wrom.darts.game.core.api.IPlayerLegStatus;
-import ru.wrom.darts.game.core.api.LegStatus;
+import ru.wrom.darts.game.core.api.IMatchController;
+import ru.wrom.darts.game.core.api.IPlayerMatchStatus;
 import ru.wrom.darts.game.core.api.Player;
 import ru.wrom.darts.game.core.api.PlayerSettings;
-import ru.wrom.darts.game.core.engine.Util;
-import ru.wrom.darts.game.core.engine.model.Attempt;
-import ru.wrom.darts.game.core.engine.model.AttemptStatus;
-import ru.wrom.darts.game.core.engine.model.Game;
-import ru.wrom.darts.game.core.engine.model.PlayerLeg;
+import ru.wrom.darts.game.core.engine.model.Match;
 
-public abstract class AbstractGameController implements IGameController {
+public class MatchController implements IMatchController {
+
+	private Match match = new Match();
+
+	public MatchController(Match match) {
+		this.match = match;
+	}
+
+	@Override
+	public List<PlayerSettings> getPlayerSettingsList() {
+		return match.getPlayerSettingsList();
+	}
+
+	@Override
+	public IPlayerMatchStatus getPlayerMatchStatus(Player player) {
+		return null;
+	}
 
 
+
+
+	/*
 	@Override
 	public boolean isCanSubmitScore(int totalScore) {
 		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
@@ -35,7 +44,7 @@ public abstract class AbstractGameController implements IGameController {
 
 	@Override
 	public Player getCurrentPlayer() {
-		return null;// getCurrentPlayerGame().getPlayer();
+		return getCurrentPlayerGame().getPlayer();
 	}
 
 	@Override
@@ -61,12 +70,10 @@ public abstract class AbstractGameController implements IGameController {
 		game = new Game();
 		game.setStartDate(new Date());
 		for (PlayerSettings playerSettings : gameSettings.getPlayersSettings()) {
-			/*
 			PlayerLeg playerLeg = new PlayerLeg();
 			playerLeg.setPlayer(playerSettings.getPlayer());
 			playerLeg.setDart(playerSettings.getDart());
-
-			game.addPlayerGame(playerLeg);*/
+			game.addPlayerGame(playerLeg);
 		}
 	}
 
@@ -203,4 +210,6 @@ public abstract class AbstractGameController implements IGameController {
 	protected boolean checkGameOver(Game game) {
 		return getCurrentPlayerGame().getAttempts().size() == 10;
 	}
+
+	*/
 }
