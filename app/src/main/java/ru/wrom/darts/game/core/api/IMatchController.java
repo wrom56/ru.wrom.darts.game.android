@@ -8,21 +8,14 @@ public interface IMatchController {
 
 	IPlayerMatchStatus getPlayerMatchStatus(Player player);
 
-
-	/*
-	void init(GameSettings gameSettings);
-
-	LegStatus addAttempt(int totalScore, Integer dartCount);
-
-	List<IPlayerLegStatus> getPlayerStatuses();
-
-	IPlayerLegStatus getPlayerLegStatus(Player player);
-
 	Player getCurrentPlayer();
 
-	void cancelLastAttempt();
+	PlayerLegStatus getPlayerLegStatus(Player player);
+
+	AddAttemptResult addAttempt(int totalScore, Integer dartCount);
 
 	boolean isCanSubmitScore(int totalScore);
 
-*/
+	void cancelLastAttempt();
+
 }

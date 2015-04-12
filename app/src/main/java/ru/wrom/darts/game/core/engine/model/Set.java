@@ -15,6 +15,10 @@ public class Set {
 		return match;
 	}
 
+	public List<Leg> getLegs() {
+		return legs;
+	}
+
 	public void newLeg() {
 		legs.add(new Leg(this, match.getPlayerSettingsList()));
 	}

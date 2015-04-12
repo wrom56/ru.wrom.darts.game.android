@@ -2,18 +2,31 @@ package ru.wrom.darts.game.core.engine.controller;
 
 import java.util.List;
 
+import ru.wrom.darts.game.core.api.AddAttemptResult;
+import ru.wrom.darts.game.core.api.IAttempt;
 import ru.wrom.darts.game.core.api.IMatchController;
 import ru.wrom.darts.game.core.api.IPlayerMatchStatus;
 import ru.wrom.darts.game.core.api.Player;
+import ru.wrom.darts.game.core.api.PlayerLegStatus;
 import ru.wrom.darts.game.core.api.PlayerSettings;
+import ru.wrom.darts.game.core.engine.controller.leg.AbstractLegController;
+import ru.wrom.darts.game.core.engine.controller.leg.LegControllerFactory;
+import ru.wrom.darts.game.core.engine.model.Attempt;
+import ru.wrom.darts.game.core.engine.model.AttemptStatus;
 import ru.wrom.darts.game.core.engine.model.Match;
+import ru.wrom.darts.game.core.engine.model.PlayerLeg;
+import ru.wrom.darts.game.core.engine.model.Set;
 
 public class MatchController implements IMatchController {
 
 	private Match match = new Match();
+	private AbstractLegController legController;
 
 	public MatchController(Match match) {
 		this.match = match;
+		match.newSet();
+		match.getSets().get(0).newLeg();
+		legController = LegControllerFactory.getController(match.getGameType());
 	}
 
 	@Override
@@ -23,13 +36,137 @@ public class MatchController implements IMatchController {
 
 	@Override
 	public IPlayerMatchStatus getPlayerMatchStatus(Player player) {
-		return null;
+		return new IPlayerMatchStatus() {
+			@Override
+			public int setWin() {
+				return 0;
+			}
+
+			@Override
+			public int legWin() {
+				return 0;
+			}
+		};
+	}
+
+	@Override
+	public Player getCurrentPlayer() {
+		return match.getPlayerSettingsList().get(0).getPlayer();
+	}
+
+	@Override
+	public PlayerLegStatus getPlayerLegStatus(final Player player) {
+		final PlayerLeg playerLeg = getCurrentPlayerLeg();
+		return new PlayerLegStatus() {
+			@Override
+			public List<? extends IAttempt> getAttempts() {
+				return playerLeg.getAttempts();
+			}
+
+			@Override
+			public int getScore() {
+				return legController.getTotalScore(playerLeg);
+			}
+
+			@Override
+			public int getDartCount() {
+				return legController.getDartCount(playerLeg);
+			}
+
+			@Override
+			public float getAverageAttemptScore() {
+				return legController.getAverageAttemptScore(playerLeg);
+			}
+
+			@Override
+			public List<String> getHints() {
+				return legController.getHints(playerLeg);
+			}
+		};
+	}
+
+	@Override
+	public AddAttemptResult addAttempt(int totalScore, Integer dartCount) {
+		return addAttempt(buildAttempt(totalScore, dartCount));
+	}
+
+	@Override
+	public boolean isCanSubmitScore(int totalScore) {
+		Attempt attempt = buildAttempt(totalScore, null);
+		return (totalScore >= 19 || legController.isCanSubmitScore(attempt)) && commonCheckAttempt(attempt) && legController.checkAttempt(attempt) != AttemptStatus.INVALID;
+	}
+
+	@Override
+	public void cancelLastAttempt() {
+
+	}
+
+	private boolean commonCheckAttempt(Attempt attempt) {
+		if (attempt.getTotalScore() != null && attempt.getTotalScore() > 180) {
+			return false;
+		}
+		if (attempt.getDartCount() != null && (attempt.getDartCount() > 3 || attempt.getDartCount() < 1)) {
+			return false;
+		}
+		return true;
+	}
+
+	private Attempt buildAttempt(int totalScore, Integer dartCount) {
+		return new Attempt(totalScore, dartCount, getCurrentPlayerLeg());
+	}
+
+	private AddAttemptResult addAttempt(Attempt attempt) {
+		if (!commonCheckAttempt(attempt)) {
+			return AddAttemptResult.INVALID_ATTEMPT;
+		}
+		return AddAttemptResult.NEXT_ATTEMPT;
+	}
+
+/*
+	protected LegStatus addAttempt(Attempt attempt) {
+		if (!checkAttempt(attempt)) {
+			return LegStatus.INVALID_ATTEMPT;
+		}
+		PlayerLeg currentPlayerLeg = getCurrentPlayerGame();
+		AttemptStatus attemptStatus = checkAttempt(attempt, currentPlayerLeg);
+
+		if (attemptStatus == AttemptStatus.CHECKOUT) {
+			int minCheckoutDartCount = getMinCheckoutDartCount(attempt);
+			if (attempt.getDartCount() != null) {
+				if (attempt.getDartCount() < minCheckoutDartCount) {
+					return LegStatus.INVALID_ATTEMPT;
+				} else {
+					return addAttempt(attempt, currentPlayerLeg);
+				}
+			} else {
+				if (minCheckoutDartCount == 3) {
+					attempt.setDartCount(3);
+					return addAttempt(attempt, currentPlayerLeg);
+				} else {
+					return minCheckoutDartCount == 1 ? LegStatus.NEED_DART_COUNT_1 : LegStatus.NEED_DART_COUNT_2;
+				}
+			}
+		}
+
+		if (attemptStatus == AttemptStatus.VALID) {
+			attempt.setDartCount(3);
+			return addAttempt(attempt, currentPlayerLeg);
+		}
+
+		return LegStatus.INVALID_ATTEMPT;
+	}
+*/
+
+	private PlayerLeg getCurrentPlayerLeg() {
+		return getCurrentSet().getLegs().get(0).getPlayerLegs().get(0);
+	}
+
+	private Set getCurrentSet() {
+		return match.getSets().get(0);
 	}
 
 
-
-
-	/*
+/*
 	@Override
 	public boolean isCanSubmitScore(int totalScore) {
 		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);

@@ -7,14 +7,16 @@ public class Attempt implements IAttempt {
 
 	private Integer totalScore;
 	private Integer dartCount;
+	private PlayerLeg playerLeg;
 
-	public Attempt(Integer totalScore) {
-		this(totalScore, null);
+	public Attempt(Integer totalScore, PlayerLeg playerLeg) {
+		this(totalScore, null, playerLeg);
 	}
 
-	public Attempt(Integer totalScore, Integer dartCount) {
+	public Attempt(Integer totalScore, Integer dartCount, PlayerLeg playerLeg) {
 		this.totalScore = totalScore;
 		this.dartCount = dartCount;
+		this.playerLeg = playerLeg;
 	}
 
 	public Integer getTotalScore() {
@@ -33,4 +35,11 @@ public class Attempt implements IAttempt {
 		this.dartCount = dartCount;
 	}
 
+	public PlayerLeg getPlayerLeg() {
+		return playerLeg;
+	}
+
+	public void setPlayerLeg(PlayerLeg playerLeg) {
+		this.playerLeg = playerLeg;
+	}
 }

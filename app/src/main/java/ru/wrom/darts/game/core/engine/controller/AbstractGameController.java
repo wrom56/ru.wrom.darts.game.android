@@ -23,7 +23,7 @@ public abstract class AbstractGameController implements IGameController {
 
 	@Override
 	public boolean isCanSubmitScore(int totalScore) {
-		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
+		return false;//(totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
 	}
 
 	protected boolean isCanSubmitScore(int totalScore, PlayerLeg playerLeg) {
@@ -72,7 +72,7 @@ public abstract class AbstractGameController implements IGameController {
 
 	@Override
 	public LegStatus addAttempt(int totalScore, Integer dartCount) {
-		return addAttempt(new Attempt(totalScore, dartCount));
+		return null;//addAttempt(new Attempt(totalScore, dartCount));
 	}
 
 
