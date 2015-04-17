@@ -103,12 +103,10 @@ public class MatchActivity extends ActionBarActivity {
 		if (newCurrentAttendScore <= 180) {
 			attemptScore = newCurrentAttendScore;
 			updateCurrentAttemptScore();
-		/*	if (gameController.isCanSubmitScore(attemptScore)) {
+			if (matchController.canSubmitScore(attemptScore)) {
 				submitScore(attemptScore, null);
 			}
-			*/
 		}
-
 	}
 
 	private void updateCurrentAttemptScore() {
@@ -178,16 +176,20 @@ public class MatchActivity extends ActionBarActivity {
 				dlgAlert.setNegativeButton("OK", null);
 				dlgAlert.create().show();
 				break;
-			case NEED_DART_COUNT:
+			case NEED_DART_COUNT_1:
 				showDartCountDialog(1);
+				break;
+			case NEED_DART_COUNT_2:
+				showDartCountDialog(2);
 				break;
 			case LEG_OVER:
 				onAddAttempt();
 				dlgAlert = new AlertDialog.Builder(this);
-				dlgAlert.setMessage("Game over");
+				dlgAlert.setMessage("Leg over");
 				dlgAlert.setNegativeButton("OK", null);
 				dlgAlert.create().show();
 		}
+
 	}
 
 	private void onAddAttempt() {

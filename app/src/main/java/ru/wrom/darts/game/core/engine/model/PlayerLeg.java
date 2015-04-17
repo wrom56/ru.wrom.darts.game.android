@@ -9,7 +9,6 @@ public class PlayerLeg {
 
 	private final Leg leg;
 	private final PlayerSettings playerSettings;
-
 	private List<Attempt> attempts = new ArrayList<>();
 
 	public PlayerLeg(Leg leg, PlayerSettings playerSettings) {
@@ -26,6 +25,7 @@ public class PlayerLeg {
 	}
 
 	public void addAttempt(Attempt attempt) {
+		attempt.setPlayerLeg(this);
 		this.attempts.add(attempt);
 	}
 

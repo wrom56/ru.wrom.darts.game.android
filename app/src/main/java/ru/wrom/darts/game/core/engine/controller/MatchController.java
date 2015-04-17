@@ -13,6 +13,7 @@ import ru.wrom.darts.game.core.engine.controller.leg.AbstractLegController;
 import ru.wrom.darts.game.core.engine.controller.leg.LegControllerFactory;
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.AttemptStatus;
+import ru.wrom.darts.game.core.engine.model.Leg;
 import ru.wrom.darts.game.core.engine.model.Match;
 import ru.wrom.darts.game.core.engine.model.PlayerLeg;
 import ru.wrom.darts.game.core.engine.model.Set;
@@ -91,9 +92,9 @@ public class MatchController implements IMatchController {
 	}
 
 	@Override
-	public boolean isCanSubmitScore(int totalScore) {
+	public boolean canSubmitScore(int totalScore) {
 		Attempt attempt = buildAttempt(totalScore, null);
-		return (totalScore >= 19 || legController.isCanSubmitScore(attempt)) && commonCheckAttempt(attempt) && legController.checkAttempt(attempt) != AttemptStatus.INVALID;
+		return (totalScore >= 19 || legController.canSubmitScore(attempt)) && commonCheckAttempt(attempt) && legController.checkAttempt(attempt, getCurrentPlayerLeg()) != AttemptStatus.INVALID;
 	}
 
 	@Override
@@ -112,241 +113,78 @@ public class MatchController implements IMatchController {
 	}
 
 	private Attempt buildAttempt(int totalScore, Integer dartCount) {
-		return new Attempt(totalScore, dartCount, getCurrentPlayerLeg());
+		return new Attempt(totalScore, dartCount);
 	}
 
 	private AddAttemptResult addAttempt(Attempt attempt) {
 		if (!commonCheckAttempt(attempt)) {
 			return AddAttemptResult.INVALID_ATTEMPT;
 		}
-		return AddAttemptResult.NEXT_ATTEMPT;
-	}
 
-/*
-	protected LegStatus addAttempt(Attempt attempt) {
-		if (!checkAttempt(attempt)) {
-			return LegStatus.INVALID_ATTEMPT;
-		}
-		PlayerLeg currentPlayerLeg = getCurrentPlayerGame();
-		AttemptStatus attemptStatus = checkAttempt(attempt, currentPlayerLeg);
+		AttemptStatus attemptStatus = legController.checkAttempt(attempt, getCurrentPlayerLeg());
 
 		if (attemptStatus == AttemptStatus.CHECKOUT) {
-			int minCheckoutDartCount = getMinCheckoutDartCount(attempt);
+			int minCheckoutDartCount = legController.getMinCheckoutDartCount(attempt);
 			if (attempt.getDartCount() != null) {
 				if (attempt.getDartCount() < minCheckoutDartCount) {
-					return LegStatus.INVALID_ATTEMPT;
+					return AddAttemptResult.INVALID_ATTEMPT;
 				} else {
-					return addAttempt(attempt, currentPlayerLeg);
+					return submitAttempt(attempt);
 				}
 			} else {
 				if (minCheckoutDartCount == 3) {
 					attempt.setDartCount(3);
-					return addAttempt(attempt, currentPlayerLeg);
+					return submitAttempt(attempt);
 				} else {
-					return minCheckoutDartCount == 1 ? LegStatus.NEED_DART_COUNT_1 : LegStatus.NEED_DART_COUNT_2;
+					return minCheckoutDartCount == 1 ? AddAttemptResult.NEED_DART_COUNT_1 : AddAttemptResult.NEED_DART_COUNT_2;
 				}
 			}
-		}
-
-		if (attemptStatus == AttemptStatus.VALID) {
+		} else if (attemptStatus == AttemptStatus.VALID) {
 			attempt.setDartCount(3);
-			return addAttempt(attempt, currentPlayerLeg);
+			return submitAttempt(attempt);
 		}
 
-		return LegStatus.INVALID_ATTEMPT;
+		return AddAttemptResult.INVALID_ATTEMPT;
 	}
-*/
+
+	private AddAttemptResult submitAttempt(Attempt attempt) {
+		PlayerLeg currentPlayerLeg = getCurrentPlayerLeg();
+		currentPlayerLeg.addAttempt(attempt);
+		if (!legController.checkLegOver(getCurrentLeg())) {
+			return AddAttemptResult.NEXT_ATTEMPT;
+		}
+		if (!checkSetOver()) {
+			getCurrentSet().newLeg();
+			return AddAttemptResult.LEG_OVER;
+		}
+
+		if (!checkMatchOver()) {
+			match.newSet();
+			return AddAttemptResult.SET_OVER;
+		}
+
+		return AddAttemptResult.MATCH_OVER;
+
+	}
+
+	private boolean checkMatchOver() {
+		return match.getSets().size() == match.getMaxSetCount();
+	}
+
+	private boolean checkSetOver() {
+		return getCurrentSet().getLegs().size() == match.getMaxLegCount();
+	}
 
 	private PlayerLeg getCurrentPlayerLeg() {
-		return getCurrentSet().getLegs().get(0).getPlayerLegs().get(0);
+		return getCurrentLeg().getPlayerLegs().get(0);
 	}
 
 	private Set getCurrentSet() {
 		return match.getSets().get(0);
 	}
 
-
-/*
-	@Override
-	public boolean isCanSubmitScore(int totalScore) {
-		return (totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
+	private Leg getCurrentLeg() {
+		return getCurrentSet().getLegs().get(getCurrentSet().getLegs().size() - 1);
 	}
 
-	protected boolean isCanSubmitScore(int totalScore, PlayerLeg playerLeg) {
-		return false;
-	}
-
-	protected Game game;
-
-
-	@Override
-	public Player getCurrentPlayer() {
-		return getCurrentPlayerGame().getPlayer();
-	}
-
-	@Override
-	public List<IPlayerLegStatus> getPlayerStatuses() {
-		List<IPlayerLegStatus> playerStatuses = new ArrayList<>();
-		for (PlayerLeg playerLeg : game.getPlayerLegs()) {
-			playerStatuses.add(buildPlayerStatus(playerLeg));
-		}
-		return playerStatuses;
-	}
-
-	@Override
-	public void cancelLastAttempt() {
-		List<Attempt> attempts = getPreviousPlayerGame().getAttempts();
-		if (attempts.isEmpty()) {
-			return;
-		}
-		attempts.remove(attempts.size() - 1);
-	}
-
-	@Override
-	public void init(GameSettings gameSettings) {
-		game = new Game();
-		game.setStartDate(new Date());
-		for (PlayerSettings playerSettings : gameSettings.getPlayersSettings()) {
-			PlayerLeg playerLeg = new PlayerLeg();
-			playerLeg.setPlayer(playerSettings.getPlayer());
-			playerLeg.setDart(playerSettings.getDart());
-			game.addPlayerGame(playerLeg);
-		}
-	}
-
-	@Override
-	public LegStatus addAttempt(int totalScore, Integer dartCount) {
-		return addAttempt(new Attempt(totalScore, dartCount));
-	}
-
-
-	@Override
-	public IPlayerLegStatus getPlayerLegStatus(Player player) {
-		return buildPlayerStatus(getCurrentPlayerGame());
-	}
-
-
-	protected LegStatus addAttempt(Attempt attempt) {
-		if (!checkAttempt(attempt)) {
-			return LegStatus.INVALID_ATTEMPT;
-		}
-		PlayerLeg currentPlayerLeg = getCurrentPlayerGame();
-		AttemptStatus attemptStatus = checkAttempt(attempt, currentPlayerLeg);
-
-		if (attemptStatus == AttemptStatus.CHECKOUT) {
-			int minCheckoutDartCount = getMinCheckoutDartCount(attempt);
-			if (attempt.getDartCount() != null) {
-				if (attempt.getDartCount() < minCheckoutDartCount) {
-					return LegStatus.INVALID_ATTEMPT;
-				} else {
-					return addAttempt(attempt, currentPlayerLeg);
-				}
-			} else {
-				if (minCheckoutDartCount == 3) {
-					attempt.setDartCount(3);
-					return addAttempt(attempt, currentPlayerLeg);
-				} else {
-					return minCheckoutDartCount == 1 ? LegStatus.NEED_DART_COUNT_1 : LegStatus.NEED_DART_COUNT_2;
-				}
-			}
-		}
-
-		if (attemptStatus == AttemptStatus.VALID) {
-			attempt.setDartCount(3);
-			return addAttempt(attempt, currentPlayerLeg);
-		}
-
-		return LegStatus.INVALID_ATTEMPT;
-	}
-
-
-	protected int getMinCheckoutDartCount(Attempt totalScore) {
-		return 3;
-	}
-
-
-	private IPlayerLegStatus buildPlayerStatus(final PlayerLeg playerLeg) {
-		return new IPlayerLegStatus() {
-
-			@Override
-			public List<? extends IAttempt> getAttempts() {
-				return playerLeg.getAttempts();
-			}
-
-			@Override
-			public int getTotalScore() {
-				return calculateLegScore(playerLeg);
-			}
-
-			@Override
-			public int getDartCount() {
-				return calculateDartCount(playerLeg);
-			}
-
-			@Override
-			public float getAverageAttemptScore() {
-				if (getDartCount() == 0) {
-					return 0;
-				}
-				return Util.calculateAttemptsTotalScore(playerLeg.getAttempts()) * 3f / getDartCount();
-			}
-
-			@Override
-			public List<String> getHints() {
-				return buildHints(playerLeg);
-			}
-		};
-
-	}
-
-	protected int calculateLegScore(PlayerLeg playerLeg) {
-		return Util.calculateAttemptsTotalScore(playerLeg.getAttempts());
-	}
-
-	protected int calculateDartCount(PlayerLeg playerLeg) {
-		return Util.calculateAttemptsDartCount(playerLeg.getAttempts());
-	}
-
-	private LegStatus addAttempt(Attempt attempt, PlayerLeg playerLeg) {
-		playerLeg.getAttempts().add(attempt);
-		return checkGameOver(game) ? LegStatus.LEG_OVER : LegStatus.ATTEMPT_ADDED;
-	}
-
-	protected boolean checkAttempt(Attempt attempt) {
-		if (attempt.getTotalScore() != null && attempt.getTotalScore() > 180) {
-			return false;
-		}
-		if (attempt.getDartCount() != null && (attempt.getDartCount() > 3 || attempt.getDartCount() < 1)) {
-			return false;
-		}
-		return true;
-	}
-
-	protected abstract AttemptStatus checkAttempt(Attempt attempt, PlayerLeg playerLeg);
-
-	protected List<String> buildHints(PlayerLeg playerLeg) {
-		return Collections.emptyList();
-	}
-
-	protected void processAttempt(Attempt attempt) {
-		if (attempt.getDartCount() == null) {
-			attempt.setDartCount(3);
-		}
-	}
-
-
-	protected PlayerLeg getCurrentPlayerGame() {
-		return game.getPlayerLegs().get(0);
-	}
-
-	protected PlayerLeg getPreviousPlayerGame() {
-		return game.getPlayerLegs().get(0);
-	}
-
-
-	protected boolean checkGameOver(Game game) {
-		return getCurrentPlayerGame().getAttempts().size() == 10;
-	}
-
-	*/
 }

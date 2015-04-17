@@ -10,6 +10,7 @@ public class Leg {
 	private final Set set;
 	private final List<PlayerLeg> playerLegs = new ArrayList<>();
 
+
 	public Leg(Set set, List<PlayerSettings> playerSettingsList) {
 		this.set = set;
 		for (PlayerSettings playerSettings : playerSettingsList) {

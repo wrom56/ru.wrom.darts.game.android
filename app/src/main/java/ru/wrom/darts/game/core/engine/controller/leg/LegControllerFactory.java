@@ -7,15 +7,10 @@ public class LegControllerFactory {
 	public static AbstractLegController getController(GameType gameType) {
 		switch (gameType.getCode()) {
 			case SECTOR_ATTEMPT:
-				return new LegController();
-			case ALL_DOUBLE:
-				return new LegController();
-			case GAME_X01:
-				return new LegController();
-			case BIG_ROUND:
-				return new LegController();
+				return new SectorLegController(gameType.getParam());
 		}
 		throw new IllegalArgumentException("Game type: " + gameType.getCode().name());
 	}
+
 
 }

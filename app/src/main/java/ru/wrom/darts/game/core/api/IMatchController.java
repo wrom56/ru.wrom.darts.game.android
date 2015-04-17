@@ -14,7 +14,7 @@ public interface IMatchController {
 
 	AddAttemptResult addAttempt(int totalScore, Integer dartCount);
 
-	boolean isCanSubmitScore(int totalScore);
+	boolean canSubmitScore(int totalScore);
 
 	void cancelLastAttempt();
 

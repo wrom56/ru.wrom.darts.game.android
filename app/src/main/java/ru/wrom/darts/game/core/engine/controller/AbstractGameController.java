@@ -23,7 +23,7 @@ public abstract class AbstractGameController implements IGameController {
 
 	@Override
 	public boolean isCanSubmitScore(int totalScore) {
-		return false;//(totalScore >= 19 || isCanSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
+		return false;//(totalScore >= 19 || canSubmitScore(totalScore, getCurrentPlayerGame())) && (checkAttempt(new Attempt(totalScore), getCurrentPlayerGame()) != AttemptStatus.INVALID);
 	}
 
 	protected boolean isCanSubmitScore(int totalScore, PlayerLeg playerLeg) {

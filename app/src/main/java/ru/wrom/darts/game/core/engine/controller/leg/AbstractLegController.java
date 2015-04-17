@@ -3,9 +3,11 @@ package ru.wrom.darts.game.core.engine.controller.leg;
 import java.util.Collections;
 import java.util.List;
 
+import ru.wrom.darts.game.core.api.Player;
 import ru.wrom.darts.game.core.engine.Util;
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.AttemptStatus;
+import ru.wrom.darts.game.core.engine.model.Leg;
 import ru.wrom.darts.game.core.engine.model.PlayerLeg;
 
 public abstract class AbstractLegController {
@@ -26,7 +28,7 @@ public abstract class AbstractLegController {
 		return Collections.emptyList();
 	}
 
-	public AttemptStatus checkAttempt(Attempt attempt) {
+	public AttemptStatus checkAttempt(Attempt attempt, PlayerLeg currentPlayerLeg) {
 		if (attempt.getTotalScore() != null && attempt.getTotalScore() > 180) {
 			return AttemptStatus.INVALID;
 		}
@@ -36,7 +38,21 @@ public abstract class AbstractLegController {
 		return AttemptStatus.VALID;
 	}
 
-	public boolean isCanSubmitScore(Attempt attempt) {
-		return false;
+	public boolean canSubmitScore(Attempt attempt) {
+		return true;
 	}
+
+	public int getMinCheckoutDartCount(Attempt attempt) {
+		return 3;
+	}
+
+	public boolean checkLegOver(Leg leg) {
+		return leg.getPlayerLegs().get(0).getAttempts().size() == 10;
+	}
+
+	public Player getWinner(Leg leg) {
+		return leg.getPlayerLegs().get(0).getPlayerSettings().getPlayer();
+	}
+
+
 }
