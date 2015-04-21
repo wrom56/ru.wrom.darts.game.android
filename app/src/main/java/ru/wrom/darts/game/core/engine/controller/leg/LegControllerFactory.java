@@ -8,6 +8,12 @@ public class LegControllerFactory {
 		switch (gameType.getCode()) {
 			case SECTOR_ATTEMPT:
 				return new SectorLegController(gameType.getParam());
+			case ALL_DOUBLE:
+				return new AllDoubleLegController();
+			case GAME_X01:
+				return new X01LegController(Integer.valueOf(gameType.getParam()));
+			case BIG_ROUND:
+				return new BigRoundLegController();
 		}
 		throw new IllegalArgumentException("Game type: " + gameType.getCode().name());
 	}

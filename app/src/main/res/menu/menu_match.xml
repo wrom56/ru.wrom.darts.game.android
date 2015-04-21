@@ -3,8 +3,8 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:context="ru.wrom.darts.game.android.activity.MatchActivity">
 	<item
-		android:id="@+id/action_settings"
-		android:title="@string/action_settings"
-		android:orderInCategory="100"
-		app:showAsAction="never"/>
+		android:id="@+id/action_cancel_last_attempt"
+		android:title="cancel"
+		android:icon="@drawable/ic_action_backspace"
+		app:showAsAction="always"/>
 </menu>

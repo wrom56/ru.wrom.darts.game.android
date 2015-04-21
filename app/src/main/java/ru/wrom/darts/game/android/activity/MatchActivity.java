@@ -24,6 +24,7 @@ import ru.wrom.darts.game.core.api.IAttempt;
 import ru.wrom.darts.game.core.api.IMatchController;
 import ru.wrom.darts.game.core.api.IPlayerMatchStatus;
 import ru.wrom.darts.game.core.api.Player;
+import ru.wrom.darts.game.core.api.PlayerLegStatus;
 import ru.wrom.darts.game.core.engine.controller.MatchControllerBuilder;
 
 public class MatchActivity extends ActionBarActivity {
@@ -48,11 +49,16 @@ public class MatchActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_cancel_last_attempt) {
-			//TODO
-			//cancelLastAttempt();
+			cancelLastAttempt();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void cancelLastAttempt() {
+		matchController.cancelLastAttempt();
+		attemptScore = 0;
+		updateView();
 	}
 
 	@Override
@@ -60,12 +66,20 @@ public class MatchActivity extends ActionBarActivity {
 		super.onPostCreate(savedInstanceState);
 		setTitle(MatchActivityHelper.getTitle(Settings.getInstance().getMatchSettings()));
 		matchController = MatchControllerBuilder.buildController(Settings.getInstance().getMatchSettings());
+		matchController.newLeg();
+		createStatusBar();
 		updateView();
+	}
+
+	private void createStatusBar() {
+		updateTextView(R.id.status_bar_param_name_1, "darts:");
+		updateTextView(R.id.status_bar_param_name_2, "3da:");
 	}
 
 	private void updateView() {
 		updateScoreTable();
 		updateCurrentAttemptScore();
+		updateStatusBar();
 	}
 
 	private void updateScoreTable() {
@@ -87,6 +101,12 @@ public class MatchActivity extends ActionBarActivity {
 
 		List<String> hints = matchController.getPlayerLegStatus(getCurrentPlayer()).getHints();
 		updateTextView(R.id.hints, hints.isEmpty() ? "" : hints.get(0));
+	}
+
+	private void updateStatusBar() {
+		PlayerLegStatus playerLegStatus = matchController.getPlayerLegStatus(getCurrentPlayer());
+		updateTextView(R.id.status_bar_param_value_1, playerLegStatus.getDartCount());
+		updateTextView(R.id.status_bar_param_value_2, String.format("%.1f", playerLegStatus.getAverageAttemptScore()));
 	}
 
 	private Player getCurrentPlayer() {
@@ -166,14 +186,13 @@ public class MatchActivity extends ActionBarActivity {
 		AddAttemptResult result = matchController.addAttempt(attemptScore, dartCount);
 		AlertDialog.Builder dlgAlert;
 		switch (result) {
-			case NEXT_ATTEMPT:
-				onAddAttempt();
-				showScoreToast(attemptScore == 0 ? "No score" : String.valueOf(attemptScore));
+			case ATTEMPT_ADDED:
+				submitAttempt();
 				break;
 			case INVALID_ATTEMPT:
 				dlgAlert = new AlertDialog.Builder(this);
 				dlgAlert.setMessage(String.valueOf(attemptScore) + " is invalid score");
-				dlgAlert.setNegativeButton("OK", null);
+				dlgAlert.setNeutralButton("OK", null);
 				dlgAlert.create().show();
 				break;
 			case NEED_DART_COUNT_1:
@@ -182,19 +201,53 @@ public class MatchActivity extends ActionBarActivity {
 			case NEED_DART_COUNT_2:
 				showDartCountDialog(2);
 				break;
-			case LEG_OVER:
-				onAddAttempt();
-				dlgAlert = new AlertDialog.Builder(this);
-				dlgAlert.setMessage("Leg over");
-				dlgAlert.setNegativeButton("OK", null);
-				dlgAlert.create().show();
 		}
 
 	}
 
-	private void onAddAttempt() {
+	private void submitAttempt() {
+		if (matchController.checkLegOver()) {
+			AlertDialog.Builder dlgAlert;
+			dlgAlert = new AlertDialog.Builder(this);
+			dlgAlert.setMessage("Leg over\nDart count: " + matchController.getPlayerLegStatus(getCurrentPlayer()).getDartCount());
+
+			dlgAlert.setPositiveButton("Submit leg", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					submitLeg();
+				}
+			});
+			dlgAlert.setNegativeButton("Cancel last attempt", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					cancelLastAttempt();
+				}
+			});
+			dlgAlert.create().show();
+		} else {
+			showScoreToast(attemptScore == 0 ? "No score" : String.valueOf(attemptScore));
+		}
 		attemptScore = 0;
 		updateView();
+	}
+
+	private void submitLeg() {
+		matchController.submitLeg();
+		if (matchController.checkMatchOver()) {
+			AlertDialog.Builder dlgAlert;
+			dlgAlert = new AlertDialog.Builder(this);
+			dlgAlert.setMessage("Match over");
+
+			dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+				}
+			});
+		} else {
+			matchController.newLeg();
+			updateView();
+		}
 	}
 
 

@@ -1,17 +1,17 @@
-package ru.wrom.darts.game.core.engine.controller;
+package ru.wrom.darts.game.core.engine.controller.leg;
 
 import java.util.Arrays;
 import java.util.List;
 
 import ru.wrom.darts.game.core.engine.model.Attempt;
 import ru.wrom.darts.game.core.engine.model.AttemptStatus;
-import ru.wrom.darts.game.core.engine.model.Game;
+import ru.wrom.darts.game.core.engine.model.Leg;
 import ru.wrom.darts.game.core.engine.model.PlayerLeg;
 
-public class BigRoundGameController extends AbstractGameController {
+public class BigRoundLegController extends AbstractLegController {
 
 	@Override
-	protected AttemptStatus checkAttempt(Attempt attempt, PlayerLeg playerLeg) {
+	public AttemptStatus checkAttempt(Attempt attempt, PlayerLeg playerLeg) {
 		int attemptNumber = playerLeg.getAttempts().size() + 1;
 		if (attemptNumber < 21) {
 			if (attempt.getTotalScore() % attemptNumber != 0 || attempt.getTotalScore() > attemptNumber * 9) {
@@ -26,24 +26,24 @@ public class BigRoundGameController extends AbstractGameController {
 	}
 
 	@Override
-	protected List<String> buildHints(PlayerLeg playerLeg) {
+	public List<String> getHints(PlayerLeg playerLeg) {
 		int attemptNumber = playerLeg.getAttempts().size() + 1;
 		if (attemptNumber <= 20) {
 			return Arrays.asList("sector " + attemptNumber);
 		} else if (attemptNumber == 21) {
 			return Arrays.asList("sector bull");
 		} else {
-			return super.buildHints(playerLeg);
+			return super.getHints(playerLeg);
 		}
 	}
 
 	@Override
-	protected boolean checkGameOver(Game game) {
-		return getCurrentPlayerGame().getAttempts().size() == 21;
+	public boolean checkLegOver(Leg leg) {
+		return leg.getPlayerLegs().get(0).getAttempts().size() == 21;
 	}
 
 	@Override
-	protected boolean isCanSubmitScore(int totalScore, PlayerLeg playerLeg) {
+	public boolean canSubmitScore(Attempt attempt, PlayerLeg playerLeg) {
 		return true;
 	}
 }

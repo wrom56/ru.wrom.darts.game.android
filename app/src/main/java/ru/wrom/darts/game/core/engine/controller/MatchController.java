@@ -21,13 +21,18 @@ import ru.wrom.darts.game.core.engine.model.Set;
 public class MatchController implements IMatchController {
 
 	private Match match = new Match();
+	private Leg currentLeg;
 	private AbstractLegController legController;
 
 	public MatchController(Match match) {
 		this.match = match;
 		match.newSet();
-		match.getSets().get(0).newLeg();
 		legController = LegControllerFactory.getController(match.getGameType());
+	}
+
+	@Override
+	public void newLeg() {
+		currentLeg = new Leg(getCurrentSet(), match.getPlayerSettingsList());
 	}
 
 	@Override
@@ -45,7 +50,7 @@ public class MatchController implements IMatchController {
 
 			@Override
 			public int legWin() {
-				return 0;
+				return getCurrentSet().getLegs().size();
 			}
 		};
 	}
@@ -94,12 +99,16 @@ public class MatchController implements IMatchController {
 	@Override
 	public boolean canSubmitScore(int totalScore) {
 		Attempt attempt = buildAttempt(totalScore, null);
-		return (totalScore >= 19 || legController.canSubmitScore(attempt)) && commonCheckAttempt(attempt) && legController.checkAttempt(attempt, getCurrentPlayerLeg()) != AttemptStatus.INVALID;
+		return (totalScore >= 19 || legController.canSubmitScore(attempt, getCurrentPlayerLeg())) && commonCheckAttempt(attempt) && legController.checkAttempt(attempt, getCurrentPlayerLeg()) != AttemptStatus.INVALID;
 	}
 
 	@Override
 	public void cancelLastAttempt() {
-
+		List<Attempt> attempts = getCurrentPlayerLeg().getAttempts();
+		if (attempts.isEmpty()) {
+			return;
+		}
+		attempts.remove(attempts.size() - 1);
 	}
 
 	private boolean commonCheckAttempt(Attempt attempt) {
@@ -147,29 +156,44 @@ public class MatchController implements IMatchController {
 		return AddAttemptResult.INVALID_ATTEMPT;
 	}
 
+	@Override
+	public void submitLeg() {
+		getCurrentSet().getLegs().add(currentLeg);
+	}
+
+	@Override
+	public boolean checkLegOver() {
+		return legController.checkLegOver(getCurrentLeg());
+	}
+
+	@Override
+	public boolean checkMatchOver() {
+		return match.getSets().size() == match.getMaxSetCount();
+	}
+
 	private AddAttemptResult submitAttempt(Attempt attempt) {
+		getCurrentPlayerLeg().addAttempt(attempt);
+		return AddAttemptResult.ATTEMPT_ADDED;
+	}
+
+	/*private AddAttemptResult submitAttempt(Attempt attempt) {
 		PlayerLeg currentPlayerLeg = getCurrentPlayerLeg();
 		currentPlayerLeg.addAttempt(attempt);
 		if (!legController.checkLegOver(getCurrentLeg())) {
-			return AddAttemptResult.NEXT_ATTEMPT;
+			return AddAttemptResult.ATTEMPT_ADDED;
 		}
+
 		if (!checkSetOver()) {
-			getCurrentSet().newLeg();
 			return AddAttemptResult.LEG_OVER;
 		}
 
 		if (!checkMatchOver()) {
-			match.newSet();
 			return AddAttemptResult.SET_OVER;
 		}
 
 		return AddAttemptResult.MATCH_OVER;
+	}*/
 
-	}
-
-	private boolean checkMatchOver() {
-		return match.getSets().size() == match.getMaxSetCount();
-	}
 
 	private boolean checkSetOver() {
 		return getCurrentSet().getLegs().size() == match.getMaxLegCount();
@@ -184,7 +208,7 @@ public class MatchController implements IMatchController {
 	}
 
 	private Leg getCurrentLeg() {
-		return getCurrentSet().getLegs().get(getCurrentSet().getLegs().size() - 1);
+		return currentLeg;
 	}
 
 }

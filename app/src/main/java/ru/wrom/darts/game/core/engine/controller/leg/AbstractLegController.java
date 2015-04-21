@@ -21,7 +21,12 @@ public abstract class AbstractLegController {
 	}
 
 	public float getAverageAttemptScore(PlayerLeg playerLeg) {
-		return 0;
+		int dartCount = getDartCount(playerLeg);
+		if (dartCount == 0) {
+			return 0;
+		}
+		return Util.calculateAttemptsTotalScore(playerLeg.getAttempts()) * 3f / dartCount;
+
 	}
 
 	public List<String> getHints(PlayerLeg playerLeg) {
@@ -38,8 +43,8 @@ public abstract class AbstractLegController {
 		return AttemptStatus.VALID;
 	}
 
-	public boolean canSubmitScore(Attempt attempt) {
-		return true;
+	public boolean canSubmitScore(Attempt attempt, PlayerLeg playerLeg) {
+		return false;
 	}
 
 	public int getMinCheckoutDartCount(Attempt attempt) {

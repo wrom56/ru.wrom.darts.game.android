@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface IMatchController {
 
+	void newLeg();
+
 	List<PlayerSettings> getPlayerSettingsList();
 
 	IPlayerMatchStatus getPlayerMatchStatus(Player player);
@@ -17,5 +19,11 @@ public interface IMatchController {
 	boolean canSubmitScore(int totalScore);
 
 	void cancelLastAttempt();
+
+	void submitLeg();
+
+	boolean checkLegOver();
+
+	boolean checkMatchOver();
 
 }
