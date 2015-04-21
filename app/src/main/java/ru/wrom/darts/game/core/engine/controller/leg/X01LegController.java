@@ -52,7 +52,7 @@ public class X01LegController extends AbstractLegController {
 	public AttemptStatus checkAttempt(Attempt attempt, PlayerLeg playerLeg) {
 		int legScore = getTotalScore(playerLeg);
 
-		if (invalidCheckouts.contains(legScore)) {
+		if (attempt.getTotalScore() == legScore && invalidCheckouts.contains(legScore)) {
 			return AttemptStatus.INVALID;
 		}
 
