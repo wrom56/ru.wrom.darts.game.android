@@ -244,6 +244,7 @@ public class MatchActivity extends ActionBarActivity {
 
 				}
 			});
+			dlgAlert.create().show();
 		} else {
 			matchController.newLeg();
 			updateView();

@@ -45,7 +45,7 @@ public class MatchController implements IMatchController {
 		return new IPlayerMatchStatus() {
 			@Override
 			public int setWin() {
-				return 0;
+				return match.getSets().size() - 1;
 			}
 
 			@Override
@@ -159,6 +159,11 @@ public class MatchController implements IMatchController {
 	@Override
 	public void submitLeg() {
 		getCurrentSet().getLegs().add(currentLeg);
+		if (checkSetOver()) {
+			if (!checkMatchOver()) {
+				match.newSet();
+			}
+		}
 	}
 
 	@Override
@@ -204,7 +209,7 @@ public class MatchController implements IMatchController {
 	}
 
 	private Set getCurrentSet() {
-		return match.getSets().get(0);
+		return match.getSets().get(match.getSets().size() - 1);
 	}
 
 	private Leg getCurrentLeg() {
