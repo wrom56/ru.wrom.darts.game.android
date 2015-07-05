@@ -6,6 +6,7 @@
 
 	<LinearLayout
 		android:id="@+id/linearLayout"
+		style="@style/GameLayout"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_alignParentStart="false"
@@ -19,7 +20,7 @@
 			android:layout_height="0dp"
 			android:layout_centerHorizontal="true"
 			android:layout_weight="1"
-			android:background="#ffcec8ff">
+			>
 
 			<TableRow
 				android:layout_width="fill_parent"
@@ -38,20 +39,20 @@
 
 				<TextView
 					android:id="@+id/leg_win"
-					android:text="0"
-					style="@style/ScoreTable.LegWin"/>
+					style="@style/ScoreTable.LegWin"
+					android:text="0"/>
 
 				<TextView
 					android:id="@+id/leg_score"
-					android:text="0"
-					style="@style/ScoreTable.LegScore"/>
+					style="@style/ScoreTable.LegScore"
+					android:text="0"/>
 
 				<LinearLayout
-					android:orientation="vertical"
 					android:layout_width="20dp"
 					android:layout_height="fill_parent"
+					android:gravity="center"
 
-					android:gravity="center">
+					android:orientation="vertical">
 
 					<TextView
 						android:id="@+id/last_attempt1"
@@ -72,65 +73,61 @@
 		</TableLayout>
 
 		<LinearLayout
-			android:orientation="horizontal"
-
 			android:layout_width="fill_parent"
 			android:layout_height="0dp"
 			android:layout_weight="1"
-			android:background="#ffcec8ff">
+			android:orientation="horizontal"
+			>
 
 			<TextView
 				android:id="@+id/attempt_score"
+				style="@style/AttemptInfo.Score"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:layout_weight="2"
-				android:text="0"
-				android:textSize="70dp"
-
-				android:gravity="center"/>
+				android:text="0"/>
 
 			<TextView
 				android:id="@+id/hints"
+				style="@style/AttemptInfo.Hint"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:layout_weight="2"
-				android:textSize="35dp"
-				android:singleLine="true"
-				android:gravity="center"/>
+				android:singleLine="true"/>
 
 		</LinearLayout>
 
 		<LinearLayout
 			style="@style/StatusBar"
-			android:background="#ff008cff">
+			android:baselineAligned="false">
 
 			<TextView
-				style="@style/StatusBarParamName"
-				android:id="@+id/status_bar_param_name_1"/>
+				android:id="@+id/status_bar_param_name_1"
+				style="@style/StatusBarParamName"/>
 
 			<TextView
 				android:id="@+id/status_bar_param_value_1"
 				style="@style/StatusBarParamValue"/>
 
 			<TextView
-				style="@style/StatusBarParamName"
-				android:id="@+id/status_bar_param_name_2"/>
+				android:id="@+id/status_bar_param_name_2"
+				style="@style/StatusBarParamName"/>
 
 			<TextView
 				android:id="@+id/status_bar_param_value_2"
 				style="@style/StatusBarParamValue"/>
 
 			<TextView
-				style="@style/StatusBarParamName"
-				android:id="@+id/status_bar_param_name_3"/>
+				android:id="@+id/status_bar_param_name_3"
+				style="@style/StatusBarParamName"/>
 
 			<TextView
 				android:id="@+id/status_bar_param_value_3"
 				style="@style/StatusBarParamValue"/>
 
 			<TextView
-				style="@style/StatusBarParamName"
-				android:id="@+id/status_bar_param_name_4"/>
+				android:id="@+id/status_bar_param_name_4"
+				style="@style/StatusBarParamName"/>
 
 			<TextView
 				android:id="@+id/status_bar_param_value_4"
@@ -142,84 +139,47 @@
 			android:layout_width="fill_parent"
 			android:layout_height="0dp"
 			android:layout_centerHorizontal="true"
-
 			android:layout_weight="3"
-			android:background="#000000">
+			>
 
 			<TableRow
-				android:layout_weight="1"
-				android:layout_column="3">
+				android:layout_column="3"
+				android:layout_weight="1">
 
 				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickNumber1"
-					android:text="1"
-					style="@style/ScoreButton"
-					android:layout_marginBottom="1dp"
-					android:layout_marginRight="1dp"/>
+					android:text="1"/>
 
 				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickNumber2"
-					android:text="2"
-					style="@style/ScoreButton"
-					android:layout_marginBottom="1dp"/>
+					android:text="2"/>
 
 				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickNumber3"
-					android:text="3"
-					style="@style/ScoreButton"
-					android:layout_marginBottom="1dp"
-					android:layout_marginLeft="1dp"/>
+					android:text="3"/>
 			</TableRow>
 
 			<TableRow
-				android:layout_weight="1"
-				android:layout_column="3">
+				android:layout_column="3"
+				android:layout_weight="1">
 
 				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickNumber4"
-					android:text="4"
-					style="@style/ScoreButton"
-					android:layout_marginRight="1dp"
-					android:layout_marginBottom="1dp"/>
+					android:text="4"/>
 
 				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickNumber5"
-					android:text="5"
-					style="@style/ScoreButton"
-					android:layout_marginBottom="1dp"/>
+					android:text="5"/>
 
 				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickNumber6"
-					android:text="6"
-					style="@style/ScoreButton"
-					android:layout_marginBottom="1dp"
-					android:layout_marginLeft="1dp"/>
-
-			</TableRow>
-
-			<TableRow
-				android:layout_weight="1"
-				android:layout_column="3">
-
-				<Button
-					android:onClick="onClickNumber7"
-					android:text="7"
-					style="@style/ScoreButton"
-					android:layout_marginRight="1dp"
-					android:layout_marginBottom="1dp"/>
-
-				<Button
-					android:onClick="onClickNumber8"
-					android:text="8"
-					style="@style/ScoreButton"
-					android:layout_marginBottom="1dp"/>
-
-				<Button
-					android:onClick="onClickNumber9"
-					android:text="9"
-					style="@style/ScoreButton"
-					android:layout_marginBottom="1dp"
-					android:layout_marginLeft="1dp"/>
+					android:text="6"/>
 
 			</TableRow>
 
@@ -228,21 +188,40 @@
 				android:layout_weight="1">
 
 				<Button
+					style="@style/ScoreButton"
+					android:onClick="onClickNumber7"
+					android:text="7"/>
+
+				<Button
+					style="@style/ScoreButton"
+					android:onClick="onClickNumber8"
+					android:text="8"/>
+
+				<Button
+					style="@style/ScoreButton"
+					android:onClick="onClickNumber9"
+					android:text="9"/>
+
+			</TableRow>
+
+			<TableRow
+				android:layout_column="3"
+				android:layout_weight="1">
+
+				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickDelete"
-					android:text="--"
-					style="@style/ScoreButton"
-					android:layout_marginRight="1dp"/>
+					android:text="--"/>
 
 				<Button
+					style="@style/ScoreButton"
 					android:onClick="onClickNumber0"
-					android:text="0"
-					style="@style/ScoreButton"/>
+					android:text="0"/>
 
 				<Button
-					android:onClick="onClickEnter"
-					android:text="ok"
 					style="@style/ScoreButton"
-					android:layout_marginLeft="1dp"/>
+					android:onClick="onClickEnter"
+					android:text="ok"/>
 
 			</TableRow>
 
