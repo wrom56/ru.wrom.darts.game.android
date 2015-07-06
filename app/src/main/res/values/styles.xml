@@ -5,19 +5,20 @@
 		<!-- Customize your theme here. -->
 	</style>
 
-	<style name="GameLayout">
-		<item name="android:background">#fc3e4757</item>
+	<style name="MatchLayout">
+		<item name="android:fontFamily">sans-serif-light</item>
+		<item name="android:background">#3e4757</item>
+		<item name="android:textColor">#ffffff</item>
 	</style>
 
-	<style name="ScoreTable">
-		<item name="android:textSize">45dp</item>
+	<style name="ScoreTable" parent="MatchLayout">
+		<item name="android:textSize">35dp</item>
 		<item name="android:gravity">center</item>
 		<item name="android:textColor">#9299a2</item>
 	</style>
 
 	<style name="ScoreTable.Player" parent="ScoreTable">
 		<item name="android:gravity">center_vertical</item>
-		<item name="android:textStyle">bold</item>
 		<item name="android:layout_weight">4</item>
 	</style>
 
@@ -30,26 +31,25 @@
 	</style>
 
 	<style name="ScoreTable.LegScore" parent="ScoreTable">
-		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">45dp</item>
 		<item name="android:layout_weight">3</item>
 	</style>
 
-	<style name="ScoreTable.LastAttempt">
+	<style name="ScoreTable.LastAttempt" parent="MatchLayout">
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:textSize">10dp</item>
 		<item name="android:gravity">right</item>
 	</style>
 
-	<style name="ScoreButton">
+	<style name="ScoreButton" parent="MatchLayout">
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_weight">1</item>
 		<item name="android:textSize">35dp</item>
-		<item name="android:background">#fc3e4757</item>
-		<item name="android:textColor">#FFFFFF</item>
 	</style>
 
-	<style name="StatusBar">
+	<style name="StatusBar" parent="MatchLayout">
+		<item name="android:fontFamily">sans-serif-light</item>
 		<item name="android:orientation">horizontal</item>
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:layout_height">wrap_content</item>
@@ -57,18 +57,19 @@
 		<item name="android:background">#FC646F80</item>
 	</style>
 
-	<style name="StatusBarParamName">
+	<style name="StatusBarParam" parent="StatusBar">
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:textSize">15dp</item>
-		<item name="android:textColor">#FFFFFF</item>
 	</style>
 
-	<style name="StatusBarParamValue" parent="StatusBarParamName">
+	<style name="StatusBarParamName" parent="StatusBarParam">
+		<item name="android:textColor">#9299a2</item>
+	</style>
+
+	<style name="StatusBarParamValue" parent="StatusBarParam">
 		<item name="android:paddingRight">20dp</item>
 		<item name="android:paddingLeft">5dp</item>
-		<item name="android:textStyle">bold</item>
-		<item name="android:textColor">#FFFFFF</item>
 	</style>
 
 	<style name="DartCountDialog" parent="AppTheme">
@@ -79,7 +80,6 @@
 	</style>
 
 	<style name="AttemptInfo.Score" parent="AttemptInfo">
-		<item name="android:textStyle">bold</item>
 		<item name="android:textSize">70dp</item>
 		<item name="android:gravity">center</item>
 	</style>
@@ -87,6 +87,18 @@
 	<style name="AttemptInfo.Hint" parent="AttemptInfo">
 		<item name="android:textSize">35dp</item>
 		<item name="android:gravity">center</item>
+	</style>
+
+	<style name="MainLayout">
+		<item name="android:fontFamily">sans-serif-light</item>
+		<item name="android:background">#3e4757</item>
+		<item name="android:textColor">#ffffff</item>
+	</style>
+
+	<style name="MatchButton" parent="MatchLayout">
+		<item name="android:layout_weight">1</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">fill_parent</item>
 	</style>
 
 </resources>

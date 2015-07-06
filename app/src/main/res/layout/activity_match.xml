@@ -6,7 +6,7 @@
 
 	<LinearLayout
 		android:id="@+id/linearLayout"
-		style="@style/GameLayout"
+		style="@style/MatchLayout"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_alignParentStart="false"
@@ -30,7 +30,8 @@
 				<TextView
 					android:id="@+id/player"
 					style="@style/ScoreTable.Player"
-					android:text="Player"/>
+					android:text="Player"
+					/>
 
 				<TextView
 					android:id="@+id/set_win"
