@@ -68,6 +68,9 @@ public class MatchActivity extends ActionBarActivity {
 		matchController = MatchControllerBuilder.buildController(Settings.getInstance().getMatchSettings());
 		matchController.newLeg();
 		createStatusBar();
+		if (Settings.getInstance().getMatchSettings().getMaxSetCount() <= 1) {
+			findViewById(R.id.set_win).setVisibility(View.INVISIBLE);
+		}
 		updateView();
 	}
 
@@ -206,6 +209,7 @@ public class MatchActivity extends ActionBarActivity {
 	}
 
 	private void submitAttempt() {
+		updateView();
 		if (matchController.checkLegOver()) {
 			AlertDialog.Builder dlgAlert;
 			dlgAlert = new AlertDialog.Builder(this);
@@ -233,7 +237,8 @@ public class MatchActivity extends ActionBarActivity {
 
 	private void submitLeg() {
 		matchController.submitLeg();
-		if (matchController.checkMatchOver()) {
+		if (matchController.checkMatchOver() && matchController.checkSetOver()) {
+			updateView();
 			AlertDialog.Builder dlgAlert;
 			dlgAlert = new AlertDialog.Builder(this);
 			dlgAlert.setMessage("Match over");

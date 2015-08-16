@@ -115,10 +115,7 @@ public class MatchController implements IMatchController {
 		if (attempt.getTotalScore() != null && attempt.getTotalScore() > 180) {
 			return false;
 		}
-		if (attempt.getDartCount() != null && (attempt.getDartCount() > 3 || attempt.getDartCount() < 1)) {
-			return false;
-		}
-		return true;
+		return !(attempt.getDartCount() != null && (attempt.getDartCount() > 3 || attempt.getDartCount() < 1));
 	}
 
 	private Attempt buildAttempt(int totalScore, Integer dartCount) {
@@ -200,8 +197,8 @@ public class MatchController implements IMatchController {
 	}*/
 
 
-	private boolean checkSetOver() {
-		return getCurrentSet().getLegs().size() == match.getMaxLegCount();
+	public boolean checkSetOver() {
+		return getCurrentSet().getLegs().size() == match.getMaxLegCount() / 2 + match.getMaxLegCount() % 2;
 	}
 
 	private PlayerLeg getCurrentPlayerLeg() {

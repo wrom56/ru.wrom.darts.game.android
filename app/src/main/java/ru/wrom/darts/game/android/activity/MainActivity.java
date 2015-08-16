@@ -71,8 +71,8 @@ public class MainActivity extends ActionBarActivity {
 		dart.setCode("1");
 		playerSettings.setDart(dart);
 		Settings.getInstance().getMatchSettings().getPlayersSettings().add(playerSettings);
-		Settings.getInstance().getMatchSettings().setMaxLegCount(2);
-		Settings.getInstance().getMatchSettings().setMaxSetCount(3);
+		Settings.getInstance().getMatchSettings().setMaxLegCount(9);
+		Settings.getInstance().getMatchSettings().setMaxSetCount(1);
 	}
 
 

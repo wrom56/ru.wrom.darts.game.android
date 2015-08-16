@@ -26,4 +26,6 @@ public interface IMatchController {
 
 	boolean checkMatchOver();
 
+	boolean checkSetOver();
+
 }
