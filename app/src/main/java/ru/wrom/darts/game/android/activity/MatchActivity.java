@@ -213,7 +213,14 @@ public class MatchActivity extends ActionBarActivity {
 		if (matchController.checkLegOver()) {
 			AlertDialog.Builder dlgAlert;
 			dlgAlert = new AlertDialog.Builder(this);
-			dlgAlert.setMessage("Leg over\nDart count: " + matchController.getPlayerLegStatus(getCurrentPlayer()).getDartCount());
+			StringBuilder mess = new StringBuilder();
+			mess.append("Leg over\n");
+			PlayerLegStatus playerLegStatus = matchController.getPlayerLegStatus(getCurrentPlayer());
+			mess.append("Score: ").append(playerLegStatus.getScore()).append("\n");
+			mess.append("Dart count: ").append(playerLegStatus.getDartCount()).append("\n");
+			mess.append(String.format("Average score %.1f%n", playerLegStatus.getAverageAttemptScore()));
+
+			dlgAlert.setMessage(mess.toString());
 
 			dlgAlert.setPositiveButton("Submit leg", new DialogInterface.OnClickListener() {
 				@Override
@@ -241,7 +248,21 @@ public class MatchActivity extends ActionBarActivity {
 			updateView();
 			AlertDialog.Builder dlgAlert;
 			dlgAlert = new AlertDialog.Builder(this);
-			dlgAlert.setMessage("Match over");
+			StringBuilder mess = new StringBuilder();
+			mess.append("Match over\n");
+
+
+			IPlayerMatchStatus playerMatchStatus = matchController.getPlayerMatchStatus(getCurrentPlayer());
+			mess.append("Leg count ").append(playerMatchStatus.legWin()).append("\n");
+			mess.append(String.format("Best leg score %.0f%n", playerMatchStatus.bestLeg().getScore()));
+			mess.append(String.format("Best leg dart count %.0f%n", playerMatchStatus.bestLeg().getDartCount()));
+			mess.append(String.format("Best 3 darts score %.1f%n", playerMatchStatus.bestLeg().getAverage3d()));
+
+			mess.append(String.format("Average leg score %.1f%n", playerMatchStatus.averageLeg().getScore()));
+			mess.append(String.format("Average leg dart count %.1f%n", playerMatchStatus.averageLeg().getDartCount()));
+			mess.append(String.format("Average 3 darts score %.1f%n", playerMatchStatus.averageLeg().getAverage3d()));
+
+			dlgAlert.setMessage(mess.toString());
 
 			dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				@Override
@@ -255,7 +276,6 @@ public class MatchActivity extends ActionBarActivity {
 			updateView();
 		}
 	}
-
 
 	private void showScoreToast(String text) {
 		LayoutInflater inflater = getLayoutInflater();

@@ -66,4 +66,9 @@ public class X01LegController extends AbstractLegController {
 
 		return AttemptStatus.VALID;
 	}
+
+	@Override
+	public boolean isDartCountMainMark() {
+		return false;
+	}
 }

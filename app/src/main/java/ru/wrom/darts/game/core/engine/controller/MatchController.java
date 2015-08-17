@@ -3,6 +3,7 @@ package ru.wrom.darts.game.core.engine.controller;
 import java.util.List;
 
 import ru.wrom.darts.game.core.api.AddAttemptResult;
+import ru.wrom.darts.game.core.api.GameStats;
 import ru.wrom.darts.game.core.api.IAttempt;
 import ru.wrom.darts.game.core.api.IMatchController;
 import ru.wrom.darts.game.core.api.IPlayerMatchStatus;
@@ -41,7 +42,7 @@ public class MatchController implements IMatchController {
 	}
 
 	@Override
-	public IPlayerMatchStatus getPlayerMatchStatus(Player player) {
+	public IPlayerMatchStatus getPlayerMatchStatus(final Player player) {
 		return new IPlayerMatchStatus() {
 			@Override
 			public int setWin() {
@@ -52,8 +53,65 @@ public class MatchController implements IMatchController {
 			public int legWin() {
 				return getCurrentSet().getLegs().size();
 			}
+
+			@Override
+			public GameStats bestLeg() {
+				GameStats stats = new GameStats();
+				PlayerLeg bestLeg = null;
+				Integer bestValue = null;
+				for (Set set : match.getSets()) {
+					for (Leg leg : set.getLegs()) {
+						for (PlayerLeg playerLeg : leg.getPlayerLegs()) {
+							if (legController.isDartCountMainMark()) {
+								int dartCount = legController.getDartCount(playerLeg);
+								if (bestValue == null || bestValue > dartCount) {
+									bestValue = dartCount;
+									bestLeg = playerLeg;
+								}
+							} else {
+								int totalScore = legController.getTotalScore(playerLeg);
+								if (bestValue == null || bestValue < totalScore) {
+									bestValue = totalScore;
+									bestLeg = playerLeg;
+								}
+							}
+						}
+					}
+				}
+				if (bestLeg != null) {
+					stats.setDartCount(legController.getDartCount(bestLeg));
+					stats.setAverage3d(legController.getAverageAttemptScore(bestLeg));
+					stats.setScore(legController.getTotalScore(bestLeg));
+				}
+				return stats;
+			}
+
+			@Override
+			public GameStats averageLeg() {
+				GameStats stats = new GameStats();
+				int score = 0;
+				float average3d = 0;
+				int dartCount = 0;
+				int legCount = 0;
+				for (Set set : match.getSets()) {
+					for (Leg leg : set.getLegs()) {
+						for (PlayerLeg playerLeg : leg.getPlayerLegs()) {
+							legCount++;
+							score += legController.getTotalScore(playerLeg);
+							average3d += legController.getAverageAttemptScore(playerLeg);
+							dartCount += legController.getDartCount(playerLeg);
+						}
+					}
+				}
+				stats.setDartCount(dartCount / legCount);
+				stats.setAverage3d(average3d / legCount);
+				stats.setScore(score / legCount);
+
+				return stats;
+			}
 		};
 	}
+
 
 	@Override
 	public Player getCurrentPlayer() {

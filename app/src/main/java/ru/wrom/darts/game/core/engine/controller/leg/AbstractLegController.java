@@ -59,5 +59,9 @@ public abstract class AbstractLegController {
 		return leg.getPlayerLegs().get(0).getPlayerSettings().getPlayer();
 	}
 
+	public boolean isDartCountMainMark() {
+		return true;
+	}
+
 
 }

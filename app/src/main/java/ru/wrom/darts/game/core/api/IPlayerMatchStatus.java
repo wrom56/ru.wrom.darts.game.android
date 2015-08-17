@@ -6,4 +6,7 @@ public interface IPlayerMatchStatus {
 
 	int legWin();
 
+	GameStats bestLeg();
+
+	GameStats averageLeg();
 }
