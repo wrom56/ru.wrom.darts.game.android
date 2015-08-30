@@ -17,15 +17,6 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".activity.GameActivity"
-			android:label="@string/title_activity_game"
-			android:parentActivityName=".activity.MainActivity"
-			android:screenOrientation="portrait">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="ru.wrom.darts.game.android.activity.MainActivity"/>
-		</activity>
-		<activity
 			android:name=".activity.MatchActivity"
 			android:label="@string/title_activity_match"
 			android:parentActivityName=".activity.MainActivity">
@@ -33,6 +24,16 @@
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value="ru.wrom.darts.game.android.activity.MainActivity"/>
 		</activity>
+		<activity
+			android:name=".activity.GameSettingsActivity"
+			android:label="@string/title_activity_game"
+			android:parentActivityName=".activity.MainActivity"
+			android:screenOrientation="portrait">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value="ru.wrom.darts.game.android.activity.MainActivity"/>
+		</activity>
+
 	</application>
 
 </manifest>

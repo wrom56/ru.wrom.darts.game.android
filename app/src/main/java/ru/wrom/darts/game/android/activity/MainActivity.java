@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void onClickBullButton(View view) {
-		startGame(GameTypeCode.SECTOR_ATTEMPT, "BULL");
+		openGameSettingsActivity(GameTypeCode.SECTOR_ATTEMPT, "BULL");
 	}
 
 	public void onClickAllDoubleButton(View view) {
@@ -78,6 +78,12 @@ public class MainActivity extends ActionBarActivity {
 
 	private void startGame(GameTypeCode gameTypeCode, String gameTypeParam) {
 		Intent intent = new Intent(this, MatchActivity.class);
+		fillSettings(gameTypeCode, gameTypeParam);
+		startActivity(intent);
+	}
+
+	private void openGameSettingsActivity(GameTypeCode gameTypeCode, String gameTypeParam) {
+		Intent intent = new Intent(this, GameSettingsActivity.class);
 		fillSettings(gameTypeCode, gameTypeParam);
 		startActivity(intent);
 	}
