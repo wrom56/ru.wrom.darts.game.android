@@ -42,4 +42,8 @@ public class AllDoubleLegController extends AbstractLegController {
 		return getTotalScore(leg.getPlayerLegs().get(0)) == 21;
 	}
 
+	@Override
+	public boolean isDartCountMainMark() {
+		return true;
+	}
 }

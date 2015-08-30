@@ -60,7 +60,7 @@ public abstract class AbstractLegController {
 	}
 
 	public boolean isDartCountMainMark() {
-		return true;
+		return false;
 	}
 
 
