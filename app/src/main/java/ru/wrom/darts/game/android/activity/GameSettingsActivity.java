@@ -96,7 +96,6 @@ public class GameSettingsActivity extends ActionBarActivity {
 	}
 
 	private void fillSettings(GameTypeCode gameTypeCode, String gameTypeParam) {
-		Settings.getInstance().getMatchSettings().setGameType(gameTypeCode, gameTypeParam);
 		PlayerSettings playerSettings = new PlayerSettings();
 		Player player = new Player();
 		player.setName("WroM");
@@ -107,6 +106,8 @@ public class GameSettingsActivity extends ActionBarActivity {
 		dart.setLabel("1");
 		dart.setCode("1");
 		playerSettings.setDart(dart);
+		Settings.getInstance().newMatchSettings();
+		Settings.getInstance().getMatchSettings().setGameType(gameTypeCode, gameTypeParam);
 		Settings.getInstance().getMatchSettings().getPlayersSettings().add(playerSettings);
 		Settings.getInstance().getMatchSettings().setMaxLegCount((Integer) legCountSpinner.getSelectedItem());
 		Settings.getInstance().getMatchSettings().setMaxSetCount(1);

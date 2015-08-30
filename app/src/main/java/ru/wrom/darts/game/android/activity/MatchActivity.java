@@ -256,8 +256,8 @@ public class MatchActivity extends ActionBarActivity {
 			mess.append("Leg count ").append(playerMatchStatus.legWin()).append("\n");
 			mess.append(String.format("Best leg score %.0f%n", playerMatchStatus.bestLeg().getScore()));
 			mess.append(String.format("Best leg dart count %.0f%n", playerMatchStatus.bestLeg().getDartCount()));
-			mess.append(String.format("Best 3 darts score %.1f%n", playerMatchStatus.bestLeg().getAverage3d()));
-
+			mess.append(String.format("Best average leg 3 darts score %.1f%n", playerMatchStatus.bestLeg().getAverage3d()));
+			mess.append("--------------------------------\n");
 			mess.append(String.format("Average leg score %.1f%n", playerMatchStatus.averageLeg().getScore()));
 			mess.append(String.format("Average leg dart count %.1f%n", playerMatchStatus.averageLeg().getDartCount()));
 			mess.append(String.format("Average 3 darts score %.1f%n", playerMatchStatus.averageLeg().getAverage3d()));
