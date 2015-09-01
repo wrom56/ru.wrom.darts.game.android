@@ -101,4 +101,19 @@
 		<item name="android:layout_height">fill_parent</item>
 	</style>
 
+	<style name="GameSettings.ParamName" parent="MainLayout">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_weight">2</item>
+		<item name="android:paddingBottom">20dp</item>
+		<item name="android:paddingRight">10dp</item>
+		<item name="android:textSize">20dp</item>
+	</style>
+
+	<style name="GameSettings.ParamValue" parent="MainLayout">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_weight">1</item>
+	</style>
+
 </resources>

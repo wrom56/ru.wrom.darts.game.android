@@ -22,16 +22,13 @@
 
 			<TextView
 				android:id="@+id/gameTypeTextView"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="2"
+				style="@style/GameSettings.ParamName"
 				android:text="Game type"/>
 
 			<Spinner
 				android:id="@+id/gameTypeSpinner"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"/>
+				style="@style/GameSettings.ParamValue"
+				/>
 
 		</LinearLayout>
 
@@ -42,15 +39,12 @@
 
 			<TextView
 				android:id="@+id/legCountTextView"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="2"
+				style="@style/GameSettings.ParamName"
 				android:text="Leg count"/>
 
 			<Spinner
 				android:id="@+id/legCountSpinner"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
+				style="@style/GameSettings.ParamValue"
 				android:layout_weight="1"/>
 
 		</LinearLayout>
@@ -58,8 +52,8 @@
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Start game"
-			android:onClick="onClickStartGameButton"/>
+			android:onClick="onClickStartGameButton"
+			android:text="Start game"/>
 
 	</LinearLayout>
 
