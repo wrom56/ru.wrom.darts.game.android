@@ -46,20 +46,19 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void onClickBullButton(View view) {
-		openGameSettingsActivity(GameTypeCode.SECTOR_ATTEMPT, "BULL");
+		startGame(GameTypeCode.SECTOR_ATTEMPT, "BULL", 5);
 	}
 
 	public void onClickAllDoubleButton(View view) {
-		startGame(GameTypeCode.ALL_DOUBLE, null);
+		startGame(GameTypeCode.ALL_DOUBLE, null, 5);
 	}
 
 	public void onClick501Button(View view) {
-		startGame(GameTypeCode.GAME_X01, "501");
+		startGame(GameTypeCode.GAME_X01, "501", 9);
 	}
 
 
-	private void fillSettings(GameTypeCode gameTypeCode, String gameTypeParam) {
-		Settings.getInstance().getMatchSettings().setGameType(gameTypeCode, gameTypeParam);
+	private void fillSettings(GameTypeCode gameTypeCode, String gameTypeParam, int maxLegCount) {
 		PlayerSettings playerSettings = new PlayerSettings();
 		Player player = new Player();
 		player.setName("WroM");
@@ -70,29 +69,34 @@ public class MainActivity extends ActionBarActivity {
 		dart.setLabel("1");
 		dart.setCode("1");
 		playerSettings.setDart(dart);
+		Settings.getInstance().newMatchSettings();
+		Settings.getInstance().getMatchSettings().setGameType(gameTypeCode, gameTypeParam);
 		Settings.getInstance().getMatchSettings().getPlayersSettings().add(playerSettings);
-		Settings.getInstance().getMatchSettings().setMaxLegCount(9);
+		Settings.getInstance().getMatchSettings().setMaxLegCount(maxLegCount);
 		Settings.getInstance().getMatchSettings().setMaxSetCount(1);
 	}
 
 
-	private void startGame(GameTypeCode gameTypeCode, String gameTypeParam) {
+	private void startGame(GameTypeCode gameTypeCode, String gameTypeParam, int maxLegCount) {
 		Intent intent = new Intent(this, MatchActivity.class);
-		fillSettings(gameTypeCode, gameTypeParam);
-		startActivity(intent);
-	}
-
-	private void openGameSettingsActivity(GameTypeCode gameTypeCode, String gameTypeParam) {
-		Intent intent = new Intent(this, GameSettingsActivity.class);
-		fillSettings(gameTypeCode, gameTypeParam);
+		fillSettings(gameTypeCode, gameTypeParam, maxLegCount);
 		startActivity(intent);
 	}
 
 	public void onClickSector20Button(View view) {
-		startGame(GameTypeCode.SECTOR_ATTEMPT, "20");
+		startGame(GameTypeCode.SECTOR_ATTEMPT, "20", 9);
 	}
 
 	public void onClickBigRoundButton(View view) {
-		startGame(GameTypeCode.BIG_ROUND, null);
+		startGame(GameTypeCode.BIG_ROUND, null, 5);
+	}
+
+	public void onClickSelectButton(View view) {
+		Intent intent = new Intent(this, GameSettingsActivity.class);
+		startActivity(intent);
+	}
+
+	public void onClick301Button(View view) {
+		startGame(GameTypeCode.GAME_X01, "301", 9);
 	}
 }

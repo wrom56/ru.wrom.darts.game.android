@@ -17,6 +17,11 @@
 		>
 
 		<Button
+			style="@style/MatchButton"
+			android:onClick="onClickSelectButton"
+			android:text="Select game"/>
+
+		<Button
 			android:id="@+id/button"
 			style="@style/MatchButton"
 			android:onClick="onClickBullButton"
@@ -31,6 +36,11 @@
 			style="@style/MatchButton"
 			android:onClick="onClick501Button"
 			android:text="501"/>
+
+		<Button
+			style="@style/MatchButton"
+			android:onClick="onClick301Button"
+			android:text="301"/>
 
 		<Button
 			style="@style/MatchButton"
